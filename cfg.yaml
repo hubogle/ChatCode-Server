@@ -1,0 +1,15 @@
+package: github.com/hubogle/chatcode-server
+generate:
+  models: true # 生成 types 的 model
+  validate: true # 是否通过 openapi 推断 validate tag
+
+output-dir:
+  types-dir: ./internal/types
+  svc-dir: ./internal/svc
+  logic-dir: ./internal/logic
+  handler-dir: ./internal/handler
+  routes-dir: ./internal/routes
+  code-dir: ./internal/code
+  response-dir: ./internal/response
+  repository-dir: ./internal/repository
+  middleware-dir: ./internal/middleware

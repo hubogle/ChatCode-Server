@@ -1,0 +1,164 @@
+openapi: 3.0.3
+info:
+  title: "ChatCode"
+  version: "1.0.0"
+
+paths:
+  /ping:
+    get:
+      tags: [ping]
+      summary: ping
+      description: ping
+      operationId: Ping
+      x-group: ping
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
+  /api/v1/login:
+    post:
+      tags: [oauth]
+      summary: user login
+      description: user login
+      operationId: OauthLogin
+      x-group: oauth
+      requestBody:
+        $ref: '#/components/requestBodies/LoginReq'
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
+  /api/v1/logout:
+    post:
+      tags: [oauth]
+      summary: user logout
+      description: user logout
+      operationId: OauthLogout
+      x-group: oauth
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
+  /api/v1/home:
+    get:
+      tags: [home]
+      summary: home page
+      description: home page
+      operationId: Home
+      x-group: home
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
+  /api/v1/room/{id}:
+    get:
+      tags: [room]
+      summary: room page
+      description: room page
+      operationId: Room
+      x-group: room
+      parameters:
+        - name: id
+          in: path
+          description: room id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
+  /api/v1/room/chat:
+    post:
+      tags: [chat]
+      summary: room chat
+      description: room chat
+      operationId: chatRoom
+      x-group: chat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_id:
+                  type: integer
+                  description: room id
+                content:
+                  type: string
+                  description: chat content
+              required:
+                - room_id
+                - content
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
+  /api/v1/private/chat:
+    post:
+      tags: [chat]
+      summary: private chat
+      description: private chat
+      operationId: chatPrivate
+      x-group: chat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to_user_id:
+                  type: integer
+                  description: to user id
+                content:
+                  type: string
+                  description: chat content
+              required:
+                - to_user_id
+                - content
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
+
+components:
+  requestBodies:
+    LoginReq:
+      description: login request body
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+                description: 用户名
+              password:
+                type: string
+                description: 密码
+            required:
+            - username
+            - password
+
+  responses:
+    SuccessResp:
+      description: 请求成功
+      content:
+        application/json:
+          x-ignore-schema: true
+          schema:
+            $ref: '#/components/schemas/CodeMessage'
+
+  schemas:
+    CodeMessage:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: 状态码
+        msg:
+           type: string
+           description: 状态信息
+      required:
+        - code
+        - msg
