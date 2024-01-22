@@ -26,7 +26,7 @@ paths:
         $ref: '#/components/requestBodies/LoginReq'
       responses:
         200:
-          $ref: '#/components/responses/SuccessResp'
+          $ref: '#/components/responses/LoginResp'
 
   /api/v1/logout:
     post:
@@ -130,17 +130,37 @@ components:
           schema:
             type: object
             properties:
-              username:
+              account:
                 type: string
                 description: 用户名
               password:
                 type: string
                 description: 密码
             required:
-            - username
+            - account
             - password
 
   responses:
+    LoginResp:
+      description: 登录成功
+      content:
+        application/json:
+          x-ignore-schema: true
+          schema:
+            description: 登录成功
+            x-level-one: data
+            allOf:
+              - $ref: '#/components/schemas/CodeMessage'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                    required:
+                      - token
+
     SuccessResp:
       description: 请求成功
       content:

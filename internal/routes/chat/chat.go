@@ -19,5 +19,5 @@ func RegisterChatRoute(e *gin.Engine, svcCtx *svc.ServiceContext) {
 
 	e.POST("/api/v1/private/chat", chatHandler.ChatPrivateHandler)
 
-	e.POST("/api/v1/root/chat", chatHandler.ChatRoomHandler)
+	e.POST("/api/v1/room/chat", chatHandler.ChatRoomHandler)
 }

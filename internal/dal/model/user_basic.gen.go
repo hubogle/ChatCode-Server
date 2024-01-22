@@ -10,7 +10,7 @@ const TableNameUserBasic = "user_basic"
 type UserBasic struct {
 	ID        uint32  `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
 	UID       uint32  `gorm:"column:uid;not null" json:"uid"`           // 用户唯一标识 ID
-	Username  string  `gorm:"column:username;not null" json:"username"` // 用户名
+	Account   string  `gorm:"column:account;not null" json:"account"`   // 用户名
 	Password  string  `gorm:"column:password;not null" json:"password"` // 密码
 	Nickname  string  `gorm:"column:nickname;not null" json:"nickname"` // 昵称
 	Email     *string `gorm:"column:email" json:"email"`                // 邮箱

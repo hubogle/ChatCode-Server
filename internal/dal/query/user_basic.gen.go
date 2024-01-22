@@ -29,7 +29,7 @@ func newUserBasic(db *gorm.DB, opts ...gen.DOOption) userBasic {
 	_userBasic.ALL = field.NewAsterisk(tableName)
 	_userBasic.ID = field.NewUint32(tableName, "id")
 	_userBasic.UID = field.NewUint32(tableName, "uid")
-	_userBasic.Username = field.NewString(tableName, "username")
+	_userBasic.Account = field.NewString(tableName, "account")
 	_userBasic.Password = field.NewString(tableName, "password")
 	_userBasic.Nickname = field.NewString(tableName, "nickname")
 	_userBasic.Email = field.NewString(tableName, "email")
@@ -48,7 +48,7 @@ type userBasic struct {
 	ALL       field.Asterisk
 	ID        field.Uint32
 	UID       field.Uint32 // 用户唯一标识 ID
-	Username  field.String // 用户名
+	Account   field.String // 用户名
 	Password  field.String // 密码
 	Nickname  field.String // 昵称
 	Email     field.String // 邮箱
@@ -73,7 +73,7 @@ func (u *userBasic) updateTableName(table string) *userBasic {
 	u.ALL = field.NewAsterisk(table)
 	u.ID = field.NewUint32(table, "id")
 	u.UID = field.NewUint32(table, "uid")
-	u.Username = field.NewString(table, "username")
+	u.Account = field.NewString(table, "account")
 	u.Password = field.NewString(table, "password")
 	u.Nickname = field.NewString(table, "nickname")
 	u.Email = field.NewString(table, "email")
@@ -99,7 +99,7 @@ func (u *userBasic) fillFieldMap() {
 	u.fieldMap = make(map[string]field.Expr, 9)
 	u.fieldMap["id"] = u.ID
 	u.fieldMap["uid"] = u.UID
-	u.fieldMap["username"] = u.Username
+	u.fieldMap["account"] = u.Account
 	u.fieldMap["password"] = u.Password
 	u.fieldMap["nickname"] = u.Nickname
 	u.fieldMap["email"] = u.Email

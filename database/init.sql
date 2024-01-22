@@ -2,7 +2,7 @@
 CREATE TABLE `user_basic` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `uid` INT UNSIGNED NOT NULL COMMENT '用户唯一标识 ID',
-    `username` VARCHAR(50) NOT NULL COMMENT '用户名',
+    `account` VARCHAR(50) NOT NULL COMMENT '用户名',
     `password` VARCHAR(255) NOT NULL COMMENT '密码',
     `nickname` VARCHAR(50) NOT NULL COMMENT '昵称',
     `email` VARCHAR(100) NULL COMMENT '邮箱',

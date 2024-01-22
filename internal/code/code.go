@@ -7,12 +7,14 @@ import (
 )
 
 const (
-	Success      = 200
-	BadRequest   = 400
-	Unauthorized = 401
-	Forbidden    = 403
-	NotFound     = 404
-	Internal     = 500
+	Success           = 200
+	BadRequest        = 400
+	Unauthorized      = 401
+	Forbidden         = 403
+	NotFound          = 404
+	Internal          = 500
+	LoginFailed       = 1001
+	LoginUserNotExist = 1002
 )
 
 // 定义常用的状态码和，错误信息，可以根据需要自行添加
@@ -23,6 +25,8 @@ func init() {
 	register(Forbidden, 403, "forbidden")
 	register(NotFound, 404, "not found")
 	register(Internal, 500, "internal server error")
+	register(LoginFailed, 200, "login failed")
+	register(LoginUserNotExist, 200, "username or password error")
 }
 
 var (

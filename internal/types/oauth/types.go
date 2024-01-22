@@ -3,9 +3,9 @@ package oauth
 
 // LoginReq defines model for LoginReq.
 type LoginReq struct {
+	// Account 用户名
+	Account string `binding:"required" json:"account"`
+
 	// Password 密码
 	Password string `binding:"required" json:"password"`
-
-	// Username 用户名
-	Username string `binding:"required" json:"username"`
 }
