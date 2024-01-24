@@ -7,7 +7,7 @@ import (
 )
 
 // ChatPrivate private chat
-// POST /api/v1/private/chat
+// POST /api/v1/chat/private
 func (l *logic) ChatPrivate(ctx context.Context, req *chat.ChatPrivateReq) (err error) {
 	// todo: add your logic here and delete this line
 

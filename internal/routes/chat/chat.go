@@ -5,6 +5,7 @@ import (
 	baseHandler "github.com/hubogle/chatcode-server/internal/handler"
 	handler "github.com/hubogle/chatcode-server/internal/handler/chat"
 	logic "github.com/hubogle/chatcode-server/internal/logic/chat"
+	"github.com/hubogle/chatcode-server/internal/middleware"
 	"github.com/hubogle/chatcode-server/internal/repository"
 	"github.com/hubogle/chatcode-server/internal/svc"
 
@@ -17,7 +18,9 @@ func RegisterChatRoute(e *gin.Engine, svcCtx *svc.ServiceContext) {
 	baseHandler := baseHandler.NewHandler(svcCtx)
 	chatHandler := handler.NewChatHandler(svcCtx, baseHandler, chatLogic)
 
-	e.POST("/api/v1/private/chat", chatHandler.ChatPrivateHandler)
+	e.GET("/api/v1/chat/list", middleware.Auth, chatHandler.ChatListHandler)
 
-	e.POST("/api/v1/room/chat", chatHandler.ChatRoomHandler)
+	e.POST("/api/v1/chat/private", middleware.Auth, chatHandler.ChatPrivateHandler)
+
+	e.POST("/api/v1/chat/room", middleware.Auth, chatHandler.ChatRoomHandler)
 }

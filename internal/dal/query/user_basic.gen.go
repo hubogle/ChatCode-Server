@@ -27,8 +27,8 @@ func newUserBasic(db *gorm.DB, opts ...gen.DOOption) userBasic {
 
 	tableName := _userBasic.userBasicDo.TableName()
 	_userBasic.ALL = field.NewAsterisk(tableName)
-	_userBasic.ID = field.NewUint32(tableName, "id")
-	_userBasic.UID = field.NewUint32(tableName, "uid")
+	_userBasic.ID = field.NewUint64(tableName, "id")
+	_userBasic.UID = field.NewUint64(tableName, "uid")
 	_userBasic.Account = field.NewString(tableName, "account")
 	_userBasic.Password = field.NewString(tableName, "password")
 	_userBasic.Nickname = field.NewString(tableName, "nickname")
@@ -46,8 +46,8 @@ type userBasic struct {
 	userBasicDo
 
 	ALL       field.Asterisk
-	ID        field.Uint32
-	UID       field.Uint32 // 用户唯一标识 ID
+	ID        field.Uint64
+	UID       field.Uint64 // 用户唯一标识 ID
 	Account   field.String // 用户名
 	Password  field.String // 密码
 	Nickname  field.String // 昵称
@@ -71,8 +71,8 @@ func (u userBasic) As(alias string) *userBasic {
 
 func (u *userBasic) updateTableName(table string) *userBasic {
 	u.ALL = field.NewAsterisk(table)
-	u.ID = field.NewUint32(table, "id")
-	u.UID = field.NewUint32(table, "uid")
+	u.ID = field.NewUint64(table, "id")
+	u.UID = field.NewUint64(table, "uid")
 	u.Account = field.NewString(table, "account")
 	u.Password = field.NewString(table, "password")
 	u.Nickname = field.NewString(table, "nickname")

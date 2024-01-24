@@ -8,7 +8,7 @@ import (
 )
 
 // ChatPrivate private chat
-// POST /api/v1/private/chat
+// POST /api/v1/chat/private
 func (h *handler) ChatPrivateHandler(c *gin.Context) {
 	var req chat.ChatPrivateReq
 	if err := c.ShouldBindJSON(&req); err != nil {

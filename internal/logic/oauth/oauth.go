@@ -11,7 +11,7 @@ import (
 //go:generate mockgen -source=$GOFILE -destination ../../mocks/logic/$GOFILE -package mock_logic
 
 type IOauthLogic interface {
-	OauthLogin(ctx context.Context, req *oauth.LoginReq) (err error)
+	OauthLogin(ctx context.Context, req *oauth.LoginReq) (resp oauth.LoginResp, err error)
 	OauthLogout(ctx context.Context) (err error)
 }
 

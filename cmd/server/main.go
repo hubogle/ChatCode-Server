@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -12,13 +13,23 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfg config.ServerConfig
+var (
+	cfg        config.ServerConfig
+	configPath string
+)
 
 func InitConfig() {
-	workDir, _ := os.Getwd()
+	flag.StringVar(&configPath, "c", "", "配置文件的路径")
+	flag.Parse()
+
+	if configPath == "" {
+		workDir, _ := os.Getwd()
+		configPath = workDir + "/config"
+	}
+	fmt.Println(configPath)
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(workDir + "/config")
+	viper.AddConfigPath(configPath)
 	viper.AutomaticEnv()
 	err := viper.ReadInConfig()
 	if err != nil {

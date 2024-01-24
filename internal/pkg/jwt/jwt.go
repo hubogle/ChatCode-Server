@@ -5,14 +5,14 @@ import (
 )
 
 type UserClaims struct {
-	UID     uint32 `json:"uid"`
+	UID     uint64 `json:"uid"`
 	Account string `json:"account"`
 	jwt.RegisteredClaims
 }
 
 var key = []byte("chat-code")
 
-func GenerateToken(uid uint32, account string) (string, error) {
+func GenerateToken(uid uint64, account string) (string, error) {
 	UserClaim := &UserClaims{
 		UID:              uid,
 		Account:          account,
@@ -28,7 +28,7 @@ func GenerateToken(uid uint32, account string) (string, error) {
 
 func ParseToken(tokenString string) (*UserClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return "", nil
+		return key, nil
 	})
 	if err != nil {
 		return nil, err

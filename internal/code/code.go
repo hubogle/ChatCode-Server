@@ -15,6 +15,7 @@ const (
 	Internal          = 500
 	LoginFailed       = 1001
 	LoginUserNotExist = 1002
+	ChatWsNewErr      = 2001
 )
 
 // 定义常用的状态码和，错误信息，可以根据需要自行添加
@@ -27,6 +28,7 @@ func init() {
 	register(Internal, 500, "internal server error")
 	register(LoginFailed, 200, "login failed")
 	register(LoginUserNotExist, 200, "username or password error")
+	register(ChatWsNewErr, 200, "chat ws new error")
 }
 
 var (
@@ -128,9 +130,17 @@ func (w *withCode) Error() string {
 	return w.err
 }
 
-func WithCodeMsg(code int, msg string) error {
+func WithCodeMsg(code int, msg ...any) error {
+	var errMsg string
+	switch len(msg) {
+	case 0:
+	case 1:
+		errMsg = msg[0].(string)
+	default:
+		errMsg = fmt.Sprintf(msg[0].(string), msg[1:]...)
+	}
 	return &withCode{
-		err:  msg,
+		err:  errMsg,
 		code: code,
 	}
 }

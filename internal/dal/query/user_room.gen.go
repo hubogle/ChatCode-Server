@@ -28,7 +28,7 @@ func newUserRoom(db *gorm.DB, opts ...gen.DOOption) userRoom {
 	tableName := _userRoom.userRoomDo.TableName()
 	_userRoom.ALL = field.NewAsterisk(tableName)
 	_userRoom.ID = field.NewUint32(tableName, "id")
-	_userRoom.UserUID = field.NewUint32(tableName, "user_uid")
+	_userRoom.UserUID = field.NewUint64(tableName, "user_uid")
 	_userRoom.RoomUID = field.NewString(tableName, "room_uid")
 	_userRoom.RoomType = field.NewInt32(tableName, "room_type")
 	_userRoom.JoinedAt = field.NewInt64(tableName, "joined_at")
@@ -46,7 +46,7 @@ type userRoom struct {
 
 	ALL       field.Asterisk
 	ID        field.Uint32
-	UserUID   field.Uint32 // 用户ID
+	UserUID   field.Uint64 // 用户ID
 	RoomUID   field.String // 房间ID
 	RoomType  field.Int32  // 房间类型 1:群聊房间 2:私聊房间
 	JoinedAt  field.Int64
@@ -70,7 +70,7 @@ func (u userRoom) As(alias string) *userRoom {
 func (u *userRoom) updateTableName(table string) *userRoom {
 	u.ALL = field.NewAsterisk(table)
 	u.ID = field.NewUint32(table, "id")
-	u.UserUID = field.NewUint32(table, "user_uid")
+	u.UserUID = field.NewUint64(table, "user_uid")
 	u.RoomUID = field.NewString(table, "room_uid")
 	u.RoomType = field.NewInt32(table, "room_type")
 	u.JoinedAt = field.NewInt64(table, "joined_at")

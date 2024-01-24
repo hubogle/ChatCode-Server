@@ -16,6 +16,6 @@ func (h *handler) OauthLoginHandler(c *gin.Context) {
 		return
 	}
 
-	err := h.logic.OauthLogin(c, &req)
-	response.HandleResponse(c, nil, err)
+	resp, err := h.logic.OauthLogin(c, &req)
+	response.HandleResponse(c, resp, err)
 }

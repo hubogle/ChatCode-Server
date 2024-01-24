@@ -28,9 +28,13 @@ func newMessageBasic(db *gorm.DB, opts ...gen.DOOption) messageBasic {
 	tableName := _messageBasic.messageBasicDo.TableName()
 	_messageBasic.ALL = field.NewAsterisk(tableName)
 	_messageBasic.ID = field.NewUint64(tableName, "id")
-	_messageBasic.UserUID = field.NewUint32(tableName, "user_uid")
+	_messageBasic.UserUID = field.NewUint64(tableName, "user_uid")
+	_messageBasic.SenderUID = field.NewUint64(tableName, "sender_uid")
 	_messageBasic.RoomUID = field.NewString(tableName, "room_uid")
+	_messageBasic.SessionType = field.NewInt32(tableName, "session_type")
 	_messageBasic.Content = field.NewString(tableName, "content")
+	_messageBasic.ContentType = field.NewInt32(tableName, "content_type")
+	_messageBasic.SendAt = field.NewInt64(tableName, "send_at")
 	_messageBasic.CreatedAt = field.NewInt64(tableName, "created_at")
 	_messageBasic.UpdatedAt = field.NewInt64(tableName, "updated_at")
 	_messageBasic.DeletedAt = field.NewInt64(tableName, "deleted_at")
@@ -43,14 +47,18 @@ func newMessageBasic(db *gorm.DB, opts ...gen.DOOption) messageBasic {
 type messageBasic struct {
 	messageBasicDo
 
-	ALL       field.Asterisk
-	ID        field.Uint64
-	UserUID   field.Uint32 // 用户ID
-	RoomUID   field.String // 房间ID
-	Content   field.String // 聊天内容
-	CreatedAt field.Int64
-	UpdatedAt field.Int64
-	DeletedAt field.Int64
+	ALL         field.Asterisk
+	ID          field.Uint64
+	UserUID     field.Uint64 // 接收者ID
+	SenderUID   field.Uint64 // 发送者ID
+	RoomUID     field.String // 房间ID
+	SessionType field.Int32  // 会话类型 1:群聊 2:私聊
+	Content     field.String // 聊天内容
+	ContentType field.Int32  // 聊天内容类型 1:文本 2:图片 3:视频 4:音频 5:文件
+	SendAt      field.Int64  // 发送时间
+	CreatedAt   field.Int64
+	UpdatedAt   field.Int64
+	DeletedAt   field.Int64
 
 	fieldMap map[string]field.Expr
 }
@@ -68,9 +76,13 @@ func (m messageBasic) As(alias string) *messageBasic {
 func (m *messageBasic) updateTableName(table string) *messageBasic {
 	m.ALL = field.NewAsterisk(table)
 	m.ID = field.NewUint64(table, "id")
-	m.UserUID = field.NewUint32(table, "user_uid")
+	m.UserUID = field.NewUint64(table, "user_uid")
+	m.SenderUID = field.NewUint64(table, "sender_uid")
 	m.RoomUID = field.NewString(table, "room_uid")
+	m.SessionType = field.NewInt32(table, "session_type")
 	m.Content = field.NewString(table, "content")
+	m.ContentType = field.NewInt32(table, "content_type")
+	m.SendAt = field.NewInt64(table, "send_at")
 	m.CreatedAt = field.NewInt64(table, "created_at")
 	m.UpdatedAt = field.NewInt64(table, "updated_at")
 	m.DeletedAt = field.NewInt64(table, "deleted_at")
@@ -90,11 +102,15 @@ func (m *messageBasic) GetFieldByName(fieldName string) (field.OrderExpr, bool) 
 }
 
 func (m *messageBasic) fillFieldMap() {
-	m.fieldMap = make(map[string]field.Expr, 7)
+	m.fieldMap = make(map[string]field.Expr, 11)
 	m.fieldMap["id"] = m.ID
 	m.fieldMap["user_uid"] = m.UserUID
+	m.fieldMap["sender_uid"] = m.SenderUID
 	m.fieldMap["room_uid"] = m.RoomUID
+	m.fieldMap["session_type"] = m.SessionType
 	m.fieldMap["content"] = m.Content
+	m.fieldMap["content_type"] = m.ContentType
+	m.fieldMap["send_at"] = m.SendAt
 	m.fieldMap["created_at"] = m.CreatedAt
 	m.fieldMap["updated_at"] = m.UpdatedAt
 	m.fieldMap["deleted_at"] = m.DeletedAt

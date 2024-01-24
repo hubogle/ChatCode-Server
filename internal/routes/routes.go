@@ -7,6 +7,7 @@ import (
 	"github.com/hubogle/chatcode-server/internal/routes/oauth"
 	"github.com/hubogle/chatcode-server/internal/routes/ping"
 	"github.com/hubogle/chatcode-server/internal/routes/room"
+	"github.com/hubogle/chatcode-server/internal/routes/ws"
 	"github.com/hubogle/chatcode-server/internal/svc"
 
 	"github.com/gin-gonic/gin"
@@ -22,4 +23,6 @@ func Setup(e *gin.Engine, svcCtx *svc.ServiceContext) {
 	ping.RegisterPingRoute(e, svcCtx)
 
 	room.RegisterRoomRoute(e, svcCtx)
+
+	ws.RegisterWsRoute(e, svcCtx)
 }

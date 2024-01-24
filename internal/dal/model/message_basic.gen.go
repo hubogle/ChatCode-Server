@@ -8,13 +8,17 @@ const TableNameMessageBasic = "message_basic"
 
 // MessageBasic mapped from table <message_basic>
 type MessageBasic struct {
-	ID        uint64 `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
-	UserUID   uint32 `gorm:"column:user_uid;not null" json:"user_uid"` // 用户ID
-	RoomUID   string `gorm:"column:room_uid;not null" json:"room_uid"` // 房间ID
-	Content   string `gorm:"column:content;not null" json:"content"`   // 聊天内容
-	CreatedAt int64  `gorm:"column:created_at;not null" json:"created_at"`
-	UpdatedAt int64  `gorm:"column:updated_at;not null" json:"updated_at"`
-	DeletedAt *int64 `gorm:"column:deleted_at" json:"deleted_at"`
+	ID          uint64 `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
+	UserUID     uint64 `gorm:"column:user_uid;not null" json:"user_uid"`         // 接收者ID
+	SenderUID   uint64 `gorm:"column:sender_uid;not null" json:"sender_uid"`     // 发送者ID
+	RoomUID     string `gorm:"column:room_uid;not null" json:"room_uid"`         // 房间ID
+	SessionType int32  `gorm:"column:session_type;not null" json:"session_type"` // 会话类型 1:群聊 2:私聊
+	Content     string `gorm:"column:content;not null" json:"content"`           // 聊天内容
+	ContentType int32  `gorm:"column:content_type;not null" json:"content_type"` // 聊天内容类型 1:文本 2:图片 3:视频 4:音频 5:文件
+	SendAt      int64  `gorm:"column:send_at;not null" json:"send_at"`           // 发送时间
+	CreatedAt   int64  `gorm:"column:created_at;not null" json:"created_at"`
+	UpdatedAt   int64  `gorm:"column:updated_at;not null" json:"updated_at"`
+	DeletedAt   *int64 `gorm:"column:deleted_at" json:"deleted_at"`
 }
 
 // IsEmpty determines whether the structure is empty

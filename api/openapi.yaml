@@ -68,13 +68,14 @@ paths:
         200:
           $ref: '#/components/responses/SuccessResp'
 
-  /api/v1/room/chat:
+  /api/v1/chat/room:
     post:
       tags: [chat]
       summary: room chat
       description: room chat
       operationId: chatRoom
       x-group: chat
+      x-middleware: auth
       requestBody:
         content:
           application/json:
@@ -94,13 +95,14 @@ paths:
         200:
           $ref: '#/components/responses/SuccessResp'
 
-  /api/v1/private/chat:
+  /api/v1/chat/private:
     post:
       tags: [chat]
       summary: private chat
       description: private chat
       operationId: chatPrivate
       x-group: chat
+      x-middleware: auth
       requestBody:
         content:
           application/json:
@@ -120,6 +122,47 @@ paths:
         200:
           $ref: '#/components/responses/SuccessResp'
 
+  /api/v1/ws:
+    get:
+      tags: [ws]
+      summary: websocket
+      description: websocket chat
+      operationId: ws
+      x-group: ws
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
+  /api/v1/chat/list:
+    get:
+      tags: [chat]
+      summary: chat list
+      description: chat list
+      operationId: chatList
+      x-group: chat
+      x-middleware: auth
+      parameters:
+        - name: room_uid
+          in: query
+          description: room uid
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: page
+          required: true
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: page size
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
 
 components:
   requestBodies:
@@ -145,7 +188,6 @@ components:
       description: 登录成功
       content:
         application/json:
-          x-ignore-schema: true
           schema:
             description: 登录成功
             x-level-one: data
@@ -160,6 +202,43 @@ components:
                         type: string
                     required:
                       - token
+
+    ChatListResp:
+      description: 聊天记录
+      content:
+        application/json:
+          schema:
+            description: 聊天记录
+            x-level-one: data
+            allOf:
+              - $ref: '#/components/schemas/CodeMessage'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            user_uid:
+                              type: integer
+                              description: 用户uid
+                            user_account:
+                              type: string
+                              description: 用户账号
+                            room_uid:
+                              type: string
+                              description: 房间uid
+                            content:
+                              type: string
+                              description: 聊天内容
+                            created_at:
+                              type: string
+                              description: 创建时间
+                    required:
+                      - list
 
     SuccessResp:
       description: 请求成功
