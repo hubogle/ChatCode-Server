@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/hubogle/chatcode-server/internal/code"
 	"github.com/hubogle/chatcode-server/internal/pkg/jwt"
 )
 
@@ -38,7 +39,8 @@ func (p *Job) Login() {
 
 	p.conn.SetUserID(uc.UID)
 	p.conn.Manager.AddConn(uc.UID, p.conn)
-	p.conn.SendMsg(uc.UID, []byte("pong"))
+	bytes := MockServerMessage(Msg_Type_login, code.Success, "ok")
+	p.conn.SendMsg(uc.UID, bytes)
 }
 
 func (p *Job) HeartBeat() {
@@ -70,8 +72,4 @@ func (p *Job) Message() {
 		fmt.Println("【消息】会话类型有误")
 		return
 	}
-}
-
-// Error 向客户端发送错误消息
-func (p *Job) Error() {
 }

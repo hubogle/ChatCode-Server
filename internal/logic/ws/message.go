@@ -3,6 +3,8 @@ package ws
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/hubogle/chatcode-server/internal/code"
 )
 
 type MsgType int32
@@ -54,6 +56,13 @@ type ClientMessage struct {
 	Data json.RawMessage `json:"data"`
 }
 
+type ServerMessage struct {
+	Type MsgType `json:"type"`
+	Code int     `json:"code"`
+	Msg  string  `json:"msg"`
+	Data string  `json:"data"`
+}
+
 // SendToUser 对指定 user id 的用户发送消息
 func SendToUser(msg *Message, userID uint64) (uint64, error) {
 	// TODO 保存数据到数据库
@@ -69,4 +78,15 @@ func SendToUser(msg *Message, userID uint64) (uint64, error) {
 
 // SendToGroup 对指定 group id 的群组发送消息
 func SendToGroup() {
+}
+
+func MockServerMessage(msgType MsgType, statusCode int, data string) []byte {
+	msg := &ServerMessage{
+		Type: msgType,
+		Code: statusCode,
+		Msg:  code.GetCoder(statusCode).String(),
+		Data: data,
+	}
+	result, _ := json.Marshal(msg)
+	return result
 }

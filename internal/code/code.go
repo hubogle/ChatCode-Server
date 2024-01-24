@@ -62,6 +62,10 @@ func MustRegister(coder Coder) {
 	codes[coder.Code()] = coder
 }
 
+func GetCoder(code int) Coder {
+	return codes[code]
+}
+
 // ParseCoder 解析错误状态码
 func ParseCoder(err error) Coder {
 	if err == nil {

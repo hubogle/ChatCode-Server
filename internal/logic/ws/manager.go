@@ -40,7 +40,6 @@ func (m *Manager) StartWorkerPool() {
 			for {
 				select {
 				case process := <-m.jobQueue[i]:
-					fmt.Println("第", i, "个消息队列接收到任务")
 					process.f()
 				}
 			}
