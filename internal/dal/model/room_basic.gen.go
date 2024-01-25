@@ -9,11 +9,11 @@ const TableNameRoomBasic = "room_basic"
 // RoomBasic mapped from table <room_basic>
 type RoomBasic struct {
 	ID        uint64  `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
-	UID       string  `gorm:"column:uid;not null" json:"uid"`           // 房间唯一标识 ID
-	UserUID   uint64  `gorm:"column:user_uid;not null" json:"user_uid"` // 创建者ID
-	Name      string  `gorm:"column:name;not null" json:"name"`         // 房间名称
-	Info      *string `gorm:"column:info" json:"info"`                  // 房间简介
-	Salt      *string `gorm:"column:salt" json:"salt"`                  // 聊天室密码盐
+	UID       uint64  `gorm:"column:uid;not null" json:"uid"`         // 房间唯一标识 ID
+	UserID    uint64  `gorm:"column:user_id;not null" json:"user_id"` // 创建者ID
+	Name      string  `gorm:"column:name;not null" json:"name"`       // 房间名称
+	Info      *string `gorm:"column:info" json:"info"`                // 房间简介
+	Salt      *string `gorm:"column:salt" json:"salt"`                // 聊天室密码盐
 	CreatedAt int64   `gorm:"column:created_at;not null" json:"created_at"`
 	UpdatedAt int64   `gorm:"column:updated_at;not null" json:"updated_at"`
 	DeletedAt *int64  `gorm:"column:deleted_at" json:"deleted_at"`

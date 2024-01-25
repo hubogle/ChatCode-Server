@@ -39,8 +39,8 @@ const (
 // Message 客户端发送给服务端的消息
 type Message struct {
 	SessionType SessionType `json:"session_type"` // 会话类型
-	ReceiverID  uint64      `json:"receiver_uid"` // 接收者id, 群组id 或 用户 id
-	SenderID    uint64      `json:"sender_uid"`   // 发送者id
+	ReceiverID  uint64      `json:"receiver_id"`  // 接收者id, 群组id 或 用户 id
+	SenderID    uint64      `json:"sender_id"`    // 发送者id
 	MessageType MessageType `json:"message_type"` // 消息类型
 	Content     []byte      `json:"content"`      // 消息内容
 	SendTime    uint64      `json:"send_time"`    // 消息发送时间

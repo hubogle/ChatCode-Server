@@ -28,9 +28,8 @@ func newMessageBasic(db *gorm.DB, opts ...gen.DOOption) messageBasic {
 	tableName := _messageBasic.messageBasicDo.TableName()
 	_messageBasic.ALL = field.NewAsterisk(tableName)
 	_messageBasic.ID = field.NewUint64(tableName, "id")
-	_messageBasic.UserUID = field.NewUint64(tableName, "user_uid")
-	_messageBasic.SenderUID = field.NewUint64(tableName, "sender_uid")
-	_messageBasic.RoomUID = field.NewString(tableName, "room_uid")
+	_messageBasic.SenderID = field.NewUint64(tableName, "sender_id")
+	_messageBasic.ReceiverID = field.NewUint64(tableName, "receiver_id")
 	_messageBasic.SessionType = field.NewInt32(tableName, "session_type")
 	_messageBasic.Content = field.NewString(tableName, "content")
 	_messageBasic.ContentType = field.NewInt32(tableName, "content_type")
@@ -49,9 +48,8 @@ type messageBasic struct {
 
 	ALL         field.Asterisk
 	ID          field.Uint64
-	UserUID     field.Uint64 // 接收者ID
-	SenderUID   field.Uint64 // 发送者ID
-	RoomUID     field.String // 房间ID
+	SenderID    field.Uint64 // 发送者ID
+	ReceiverID  field.Uint64 // 接收者ID
 	SessionType field.Int32  // 会话类型 1:群聊 2:私聊
 	Content     field.String // 聊天内容
 	ContentType field.Int32  // 聊天内容类型 1:文本 2:图片 3:视频 4:音频 5:文件
@@ -76,9 +74,8 @@ func (m messageBasic) As(alias string) *messageBasic {
 func (m *messageBasic) updateTableName(table string) *messageBasic {
 	m.ALL = field.NewAsterisk(table)
 	m.ID = field.NewUint64(table, "id")
-	m.UserUID = field.NewUint64(table, "user_uid")
-	m.SenderUID = field.NewUint64(table, "sender_uid")
-	m.RoomUID = field.NewString(table, "room_uid")
+	m.SenderID = field.NewUint64(table, "sender_id")
+	m.ReceiverID = field.NewUint64(table, "receiver_id")
 	m.SessionType = field.NewInt32(table, "session_type")
 	m.Content = field.NewString(table, "content")
 	m.ContentType = field.NewInt32(table, "content_type")
@@ -102,11 +99,10 @@ func (m *messageBasic) GetFieldByName(fieldName string) (field.OrderExpr, bool) 
 }
 
 func (m *messageBasic) fillFieldMap() {
-	m.fieldMap = make(map[string]field.Expr, 11)
+	m.fieldMap = make(map[string]field.Expr, 10)
 	m.fieldMap["id"] = m.ID
-	m.fieldMap["user_uid"] = m.UserUID
-	m.fieldMap["sender_uid"] = m.SenderUID
-	m.fieldMap["room_uid"] = m.RoomUID
+	m.fieldMap["sender_id"] = m.SenderID
+	m.fieldMap["receiver_id"] = m.ReceiverID
 	m.fieldMap["session_type"] = m.SessionType
 	m.fieldMap["content"] = m.Content
 	m.fieldMap["content_type"] = m.ContentType

@@ -9,9 +9,8 @@ const TableNameMessageBasic = "message_basic"
 // MessageBasic mapped from table <message_basic>
 type MessageBasic struct {
 	ID          uint64 `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
-	UserUID     uint64 `gorm:"column:user_uid;not null" json:"user_uid"`         // 接收者ID
-	SenderUID   uint64 `gorm:"column:sender_uid;not null" json:"sender_uid"`     // 发送者ID
-	RoomUID     string `gorm:"column:room_uid;not null" json:"room_uid"`         // 房间ID
+	SenderID    uint64 `gorm:"column:sender_id;not null" json:"sender_id"`       // 发送者ID
+	ReceiverID  uint64 `gorm:"column:receiver_id;not null" json:"receiver_id"`   // 接收者ID
 	SessionType int32  `gorm:"column:session_type;not null" json:"session_type"` // 会话类型 1:群聊 2:私聊
 	Content     string `gorm:"column:content;not null" json:"content"`           // 聊天内容
 	ContentType int32  `gorm:"column:content_type;not null" json:"content_type"` // 聊天内容类型 1:文本 2:图片 3:视频 4:音频 5:文件

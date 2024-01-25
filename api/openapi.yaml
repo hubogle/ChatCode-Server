@@ -68,60 +68,6 @@ paths:
         200:
           $ref: '#/components/responses/SuccessResp'
 
-  /api/v1/chat/room:
-    post:
-      tags: [chat]
-      summary: room chat
-      description: room chat
-      operationId: chatRoom
-      x-group: chat
-      x-middleware: auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                room_id:
-                  type: integer
-                  description: room id
-                content:
-                  type: string
-                  description: chat content
-              required:
-                - room_id
-                - content
-      responses:
-        200:
-          $ref: '#/components/responses/SuccessResp'
-
-  /api/v1/chat/private:
-    post:
-      tags: [chat]
-      summary: private chat
-      description: private chat
-      operationId: chatPrivate
-      x-group: chat
-      x-middleware: auth
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                to_user_id:
-                  type: integer
-                  description: to user id
-                content:
-                  type: string
-                  description: chat content
-              required:
-                - to_user_id
-                - content
-      responses:
-        200:
-          $ref: '#/components/responses/SuccessResp'
-
   /api/v1/ws:
     get:
       tags: [ws]
@@ -142,12 +88,13 @@ paths:
       x-group: chat
       x-middleware: auth
       parameters:
-        - name: room_uid
+        - name: room_id
           in: query
-          description: room uid
+          description: room id
           required: true
           schema:
-            type: string
+            type: integer
+            format: uint64
         - name: page
           in: query
           description: page
@@ -222,15 +169,17 @@ components:
                         items:
                           type: object
                           properties:
-                            user_uid:
+                            user_id:
                               type: integer
-                              description: 用户uid
+                              format: uint64
+                              description: 用户id
                             user_account:
                               type: string
                               description: 用户账号
-                            room_uid:
-                              type: string
-                              description: 房间uid
+                            room_id:
+                              type: integer
+                              format: uint64
+                              description: 房间id
                             content:
                               type: string
                               description: 聊天内容

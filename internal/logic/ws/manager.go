@@ -1,7 +1,6 @@
 package ws
 
 import (
-	"fmt"
 	"sync"
 )
 
@@ -36,7 +35,6 @@ func (m *Manager) StartWorkerPool() {
 	for i := 0; i < len(m.jobQueue); i++ {
 		m.jobQueue[i] = make(chan *Job, 10) // 每个队列处理的任务数量
 		go func(i int) {
-			fmt.Println("启动第", i, "个消息队列")
 			for {
 				select {
 				case process := <-m.jobQueue[i]:

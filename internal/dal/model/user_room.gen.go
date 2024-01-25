@@ -9,8 +9,8 @@ const TableNameUserRoom = "user_room"
 // UserRoom mapped from table <user_room>
 type UserRoom struct {
 	ID        uint32 `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
-	UserUID   uint64 `gorm:"column:user_uid;not null" json:"user_uid"`   // 用户ID
-	RoomUID   string `gorm:"column:room_uid;not null" json:"room_uid"`   // 房间ID
+	UserID    uint64 `gorm:"column:user_id;not null" json:"user_id"`     // 用户ID
+	RoomID    uint64 `gorm:"column:room_id;not null" json:"room_id"`     // 房间ID
 	RoomType  int32  `gorm:"column:room_type;not null" json:"room_type"` // 房间类型 1:群聊房间 2:私聊房间
 	JoinedAt  int64  `gorm:"column:joined_at;not null" json:"joined_at"`
 	CreatedAt int64  `gorm:"column:created_at;not null" json:"created_at"`

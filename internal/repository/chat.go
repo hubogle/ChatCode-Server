@@ -11,10 +11,8 @@ import (
 //go:generate mockgen -source=$GOFILE -destination ../mocks/repository/$GOFILE -package mock_repo
 
 type ChatRepo interface {
-	GetUserRoomByUserUIDRoomUID(ctx context.Context, userUID uint64, roomUID string) (err error)
-	GetUserRoomByRoomUID(ctx context.Context, roomUID string) (userUIDs []uint64, err error)
-	InsertOneMessageBasic(ctx context.Context, messageBasic *model.MessageBasic) (err error)
-	GetMessageListByRoomUID(ctx context.Context, roomUID string, offset, limit int) (messageList []*model.MessageBasic, err error)
+	GetUserRoomByUserIDRoomID(ctx context.Context, userID, roomID uint64) (err error)
+	GetMessageListByRoomID(ctx context.Context, roomUID uint64, offset, limit int) (messageList []*model.MessageBasic, err error)
 }
 
 func NewChatRepo(svcRepo *svc.ServiceContext) ChatRepo {
@@ -29,32 +27,20 @@ type chatRepo struct {
 	*query.Query
 }
 
-// GetUserRoomByUserUIDRoomUID get user room by user uid and room uid
-func (r *chatRepo) GetUserRoomByUserUIDRoomUID(ctx context.Context, userUID uint64, roomUID string) (err error) {
+// GetUserRoomByUserIDRoomID get user room by user id and room id
+func (r *chatRepo) GetUserRoomByUserIDRoomID(ctx context.Context, userID, roomID uint64) (err error) {
 	_, err = r.UserRoom.WithContext(ctx).Where(
-		r.UserRoom.UserUID.Eq(userUID),
-		r.UserRoom.RoomUID.Eq(roomUID),
+		r.UserRoom.UserID.Eq(userID),
+		r.UserRoom.RoomID.Eq(roomID),
 	).Take()
 	return
 }
 
-// GetUserRoomByRoomUID get user room by room uid
-func (r *chatRepo) GetUserRoomByRoomUID(ctx context.Context, roomUID string) (userUIDs []uint64, err error) {
-	err = r.UserRoom.WithContext(ctx).
-		Where(r.UserRoom.RoomUID.Eq(roomUID)).
-		Pluck(r.UserRoom.UserUID, &userUIDs)
-	return
-}
-
-func (r *chatRepo) InsertOneMessageBasic(ctx context.Context, messageBasic *model.MessageBasic) (err error) {
-	return r.MessageBasic.Create(messageBasic)
-}
-
-// GetMessageListByRoomUID get message list by room uid
-func (r *chatRepo) GetMessageListByRoomUID(ctx context.Context, roomUID string, offset, limit int) (messageList []*model.MessageBasic, err error) {
+// GetMessageListByRoomID get message list by room id
+func (r *chatRepo) GetMessageListByRoomID(ctx context.Context, roomID uint64, offset, limit int) (messageList []*model.MessageBasic, err error) {
 	messageList, _, err = r.MessageBasic.WithContext(ctx).
-		Select(r.MessageBasic.Content, r.MessageBasic.UserUID).
-		Where(r.MessageBasic.RoomUID.Eq(roomUID)).
+		Select(r.MessageBasic.Content, r.MessageBasic.SenderID).
+		Where(r.MessageBasic.ReceiverID.Eq(roomID)).
 		Order(r.MessageBasic.CreatedAt.Desc()).
 		FindByPage(limit, (offset-1)*limit)
 	return

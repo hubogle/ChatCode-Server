@@ -28,8 +28,8 @@ func newRoomBasic(db *gorm.DB, opts ...gen.DOOption) roomBasic {
 	tableName := _roomBasic.roomBasicDo.TableName()
 	_roomBasic.ALL = field.NewAsterisk(tableName)
 	_roomBasic.ID = field.NewUint64(tableName, "id")
-	_roomBasic.UID = field.NewString(tableName, "uid")
-	_roomBasic.UserUID = field.NewUint64(tableName, "user_uid")
+	_roomBasic.UID = field.NewUint64(tableName, "uid")
+	_roomBasic.UserID = field.NewUint64(tableName, "user_id")
 	_roomBasic.Name = field.NewString(tableName, "name")
 	_roomBasic.Info = field.NewString(tableName, "info")
 	_roomBasic.Salt = field.NewString(tableName, "salt")
@@ -47,8 +47,8 @@ type roomBasic struct {
 
 	ALL       field.Asterisk
 	ID        field.Uint64
-	UID       field.String // 房间唯一标识 ID
-	UserUID   field.Uint64 // 创建者ID
+	UID       field.Uint64 // 房间唯一标识 ID
+	UserID    field.Uint64 // 创建者ID
 	Name      field.String // 房间名称
 	Info      field.String // 房间简介
 	Salt      field.String // 聊天室密码盐
@@ -72,8 +72,8 @@ func (r roomBasic) As(alias string) *roomBasic {
 func (r *roomBasic) updateTableName(table string) *roomBasic {
 	r.ALL = field.NewAsterisk(table)
 	r.ID = field.NewUint64(table, "id")
-	r.UID = field.NewString(table, "uid")
-	r.UserUID = field.NewUint64(table, "user_uid")
+	r.UID = field.NewUint64(table, "uid")
+	r.UserID = field.NewUint64(table, "user_id")
 	r.Name = field.NewString(table, "name")
 	r.Info = field.NewString(table, "info")
 	r.Salt = field.NewString(table, "salt")
@@ -99,7 +99,7 @@ func (r *roomBasic) fillFieldMap() {
 	r.fieldMap = make(map[string]field.Expr, 9)
 	r.fieldMap["id"] = r.ID
 	r.fieldMap["uid"] = r.UID
-	r.fieldMap["user_uid"] = r.UserUID
+	r.fieldMap["user_id"] = r.UserID
 	r.fieldMap["name"] = r.Name
 	r.fieldMap["info"] = r.Info
 	r.fieldMap["salt"] = r.Salt

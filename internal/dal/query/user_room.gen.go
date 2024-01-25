@@ -28,8 +28,8 @@ func newUserRoom(db *gorm.DB, opts ...gen.DOOption) userRoom {
 	tableName := _userRoom.userRoomDo.TableName()
 	_userRoom.ALL = field.NewAsterisk(tableName)
 	_userRoom.ID = field.NewUint32(tableName, "id")
-	_userRoom.UserUID = field.NewUint64(tableName, "user_uid")
-	_userRoom.RoomUID = field.NewString(tableName, "room_uid")
+	_userRoom.UserID = field.NewUint64(tableName, "user_id")
+	_userRoom.RoomID = field.NewUint64(tableName, "room_id")
 	_userRoom.RoomType = field.NewInt32(tableName, "room_type")
 	_userRoom.JoinedAt = field.NewInt64(tableName, "joined_at")
 	_userRoom.CreatedAt = field.NewInt64(tableName, "created_at")
@@ -46,8 +46,8 @@ type userRoom struct {
 
 	ALL       field.Asterisk
 	ID        field.Uint32
-	UserUID   field.Uint64 // 用户ID
-	RoomUID   field.String // 房间ID
+	UserID    field.Uint64 // 用户ID
+	RoomID    field.Uint64 // 房间ID
 	RoomType  field.Int32  // 房间类型 1:群聊房间 2:私聊房间
 	JoinedAt  field.Int64
 	CreatedAt field.Int64
@@ -70,8 +70,8 @@ func (u userRoom) As(alias string) *userRoom {
 func (u *userRoom) updateTableName(table string) *userRoom {
 	u.ALL = field.NewAsterisk(table)
 	u.ID = field.NewUint32(table, "id")
-	u.UserUID = field.NewUint64(table, "user_uid")
-	u.RoomUID = field.NewString(table, "room_uid")
+	u.UserID = field.NewUint64(table, "user_id")
+	u.RoomID = field.NewUint64(table, "room_id")
 	u.RoomType = field.NewInt32(table, "room_type")
 	u.JoinedAt = field.NewInt64(table, "joined_at")
 	u.CreatedAt = field.NewInt64(table, "created_at")
@@ -95,8 +95,8 @@ func (u *userRoom) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 func (u *userRoom) fillFieldMap() {
 	u.fieldMap = make(map[string]field.Expr, 8)
 	u.fieldMap["id"] = u.ID
-	u.fieldMap["user_uid"] = u.UserUID
-	u.fieldMap["room_uid"] = u.RoomUID
+	u.fieldMap["user_id"] = u.UserID
+	u.fieldMap["room_id"] = u.RoomID
 	u.fieldMap["room_type"] = u.RoomType
 	u.fieldMap["joined_at"] = u.JoinedAt
 	u.fieldMap["created_at"] = u.CreatedAt

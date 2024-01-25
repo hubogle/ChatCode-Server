@@ -10,11 +10,11 @@ import (
 // ChatList chat list
 // GET /api/v1/chat/list
 func (l *logic) ChatList(ctx context.Context, uc *jwt.UserClaims, req *chat.ChatListReq) (err error) {
-	err = l.repo.GetUserRoomByUserUIDRoomUID(ctx, uc.UID, req.RoomUid)
+	err = l.repo.GetUserRoomByUserIDRoomID(ctx, uc.UID, req.RoomId)
 	if err != nil {
 		return err
 	}
-	data, err := l.repo.GetMessageListByRoomUID(ctx, req.RoomUid, req.PageSize, req.Page)
+	data, err := l.repo.GetMessageListByRoomID(ctx, req.RoomId, req.PageSize, req.Page)
 	if err != nil {
 		return err
 	}
