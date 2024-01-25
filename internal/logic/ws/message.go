@@ -3,8 +3,12 @@ package ws
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/hubogle/chatcode-server/internal/code"
+	"github.com/hubogle/chatcode-server/internal/dal/model"
+	"github.com/hubogle/chatcode-server/internal/dal/query"
+	"github.com/pkg/errors"
 )
 
 type MsgType int32
@@ -42,8 +46,8 @@ type Message struct {
 	ReceiverID  uint64      `json:"receiver_id"`  // 接收者id, 群组id 或 用户 id
 	SenderID    uint64      `json:"sender_id"`    // 发送者id
 	MessageType MessageType `json:"message_type"` // 消息类型
-	Content     []byte      `json:"content"`      // 消息内容
-	SendTime    uint64      `json:"send_time"`    // 消息发送时间
+	Content     string      `json:"content"`      // 消息内容
+	SendAt      int64       `json:"send_at"`      // 消息发送时间
 }
 
 type LoginMessage struct {
@@ -64,16 +68,35 @@ type ServerMessage struct {
 }
 
 // SendToUser 对指定 user id 的用户发送消息
-func SendToUser(msg *Message, userID uint64) (uint64, error) {
-	// TODO 保存数据到数据库
+func SendToUser(msg *Message, userID uint64) error {
+	_, err := query.Q.UserBasic.Where(query.UserBasic.ID.Eq(userID)).Take()
+	if err != nil {
+		return errors.Wrap(err, fmt.Sprintf("user id %d not found", userID))
+	}
+
+	now := time.Now().Unix()
+	messageBasic := &model.MessageBasic{
+		SenderID:    msg.SenderID,
+		ReceiverID:  msg.ReceiverID,
+		SessionType: int32(msg.SessionType),
+		Content:     string(msg.Content),
+		ContentType: int32(msg.MessageType),
+		SendAt:      msg.SendAt,
+		CreatedAt:   now,
+		UpdatedAt:   now,
+	}
+	err = query.Q.MessageBasic.Create(messageBasic)
+	if err != nil {
+		return errors.Wrap(err, "message basic create error")
+	}
 
 	conn := ConnManager.GetConn(userID)
 	if conn == nil {
-		fmt.Println("【消息】接收者不在线")
+		return errors.New(fmt.Sprintf("user id %d not online", userID))
 	}
 	conn.SendMsg(userID, msg.Content)
 
-	return 0, nil
+	return nil
 }
 
 // SendToGroup 对指定 group id 的群组发送消息

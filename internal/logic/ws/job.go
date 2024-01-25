@@ -2,14 +2,14 @@ package ws
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/hubogle/chatcode-server/internal/code"
 	"github.com/hubogle/chatcode-server/internal/pkg/jwt"
+	"github.com/pkg/errors"
 )
 
 type (
-	Handler func()
+	Handler func() error
 	Job     struct {
 		conn    *Connection     // 链接
 		message json.RawMessage // 原始数据
@@ -17,59 +17,61 @@ type (
 	}
 )
 
-// 对应每种消息类型的处理函数
-func (p *Job) Login() {
+// Login user login
+func (p *Job) Login() error {
 	if p.conn.GetUserID() != 0 {
-		fmt.Println("【登录】用户已登录")
-		return
+		return errors.New("user already login")
 	}
 
 	msg := &LoginMessage{}
 	err := json.Unmarshal(p.message, msg)
 	if err != nil {
-		fmt.Println("error: ", err)
-		return
+		return errors.WithMessage(err, "unmarshal message error")
 	}
 
 	uc, err := jwt.ParseToken(msg.Token)
 	if err != nil {
-		fmt.Println("【登录】token 解析失败", err)
-		return
+		return errors.WithMessage(err, "token parse error")
 	}
 
 	p.conn.SetUserID(uc.UID)
 	p.conn.Manager.AddConn(uc.UID, p.conn)
 	bytes := MockServerMessage(Msg_Type_login, code.Success, "ok")
-	p.conn.SendMsg(uc.UID, bytes)
+	p.conn.SendMsg(uc.UID, string(bytes))
+	return nil
 }
 
 func (p *Job) HeartBeat() {
 }
 
 // Message 处理客户端发送给服务端的消息，包括：单聊，群聊
-func (p *Job) Message() {
+func (p *Job) Message() error {
 	msg := &Message{}
 	userID := p.conn.GetUserID() // send message user id
 	err := json.Unmarshal(p.message, msg)
 	if err != nil {
-		return
+		return errors.WithMessage(err, "unmarshal message error")
 	}
 
 	if msg.SenderID != userID {
-		fmt.Println("【消息】发送有误")
-		return
+		return errors.New("sender id error")
 	}
 
 	if msg.SessionType == SessionType_Single && msg.ReceiverID == userID {
-		fmt.Println("【消息】接收着有误")
-		return
+		return errors.New("receiver id error")
+	}
+	if err = SendToUser(msg, msg.SenderID); err != nil {
+		return errors.WithMessage(err, "send to myself error")
 	}
 
 	switch msg.SessionType {
 	case SessionType_Single:
+		if err = SendToUser(msg, msg.ReceiverID); err != nil {
+			return errors.WithMessage(err, "send to user error")
+		}
 	case SessionType_Group:
 	default:
-		fmt.Println("【消息】会话类型有误")
-		return
+		return errors.New("session type error")
 	}
+	return nil
 }

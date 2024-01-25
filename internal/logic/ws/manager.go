@@ -1,6 +1,8 @@
 package ws
 
 import (
+	"fmt"
+	"os"
 	"sync"
 )
 
@@ -38,7 +40,10 @@ func (m *Manager) StartWorkerPool() {
 			for {
 				select {
 				case process := <-m.jobQueue[i]:
-					process.f()
+					err := process.f()
+					if err != nil {
+						fmt.Fprintf(os.Stderr, "process error: %+v\n", err)
+					}
 				}
 			}
 		}(i)

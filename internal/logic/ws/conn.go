@@ -138,7 +138,7 @@ func (c *Connection) Writer() {
 }
 
 // SendMsg 对指定 user id 的用户发送消息
-func (c *Connection) SendMsg(userID uint64, message []byte) {
+func (c *Connection) SendMsg(userID uint64, message string) {
 	c.isCloseMutex.RLock()
 	defer c.isCloseMutex.RUnlock()
 
@@ -151,7 +151,7 @@ func (c *Connection) SendMsg(userID uint64, message []byte) {
 		return
 	}
 
-	conn.sendCh <- message
+	conn.sendCh <- []byte(message)
 
 	return
 }
