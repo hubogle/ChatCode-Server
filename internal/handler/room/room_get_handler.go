@@ -7,15 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Room room page
+// RoomGet room get
 // GET /api/v1/room/:id
-func (h *handler) RoomHandler(c *gin.Context) {
-	var req room.RoomReq
+func (h *handler) RoomGetHandler(c *gin.Context) {
+	var req room.RoomGetReq
 	if err := c.ShouldBindUri(&req); err != nil {
 		response.HandlerParamsResponse(c, err)
 		return
 	}
 
-	err := h.logic.Room(c, &req)
+	err := h.logic.RoomGet(c, &req)
 	response.HandleResponse(c, nil, err)
 }

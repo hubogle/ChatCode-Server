@@ -90,12 +90,19 @@ func (c *Connection) Reader() {
 		_, messageRaw, err := c.Socket.ReadMessage()
 		if err != nil {
 			fmt.Println("read message error: ", err)
-			return
+			if c.GetUserID() == 0 {
+				return
+			}
 		}
 		message := &ClientMessage{}
 		err = json.Unmarshal(messageRaw, message)
 		if err != nil {
 			fmt.Println("unmarshal message error: ", err)
+			if c.GetUserID() == 0 {
+				return
+			}
+		}
+		if message.Type != Msg_Type_login && c.GetUserID() == 0 {
 			return
 		}
 
@@ -113,7 +120,6 @@ func (c *Connection) Reader() {
 			job.f = job.Message
 		default:
 			fmt.Println("unknown message type")
-			return
 		}
 
 		c.KeepLive()

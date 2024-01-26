@@ -8,7 +8,9 @@ import (
 )
 
 type IRoomHandler interface {
-	RoomHandler(ctx *gin.Context)
+	RoomCreateHandler(ctx *gin.Context)
+	RoomJoinHandler(ctx *gin.Context)
+	RoomGetHandler(ctx *gin.Context)
 }
 
 func NewRoomHandler(handlerSvc *svc.ServiceContext, hdl hdl.Handler, logic room.IRoomLogic) IRoomHandler {

@@ -28,7 +28,7 @@ type SessionType uint8
 const (
 	SessionType_UnKnow SessionType = 0 // 未知
 	SessionType_Single SessionType = 1 // 单聊
-	SessionType_Group  SessionType = 2 // 群聊
+	SessionType_Room   SessionType = 2 // 群聊
 )
 
 // 用户所发送内容的消息类型
@@ -99,8 +99,9 @@ func SendToUser(msg *Message, userID uint64) error {
 	return nil
 }
 
-// SendToGroup 对指定 group id 的群组发送消息
-func SendToGroup() {
+// SendToRoom 对指定 room id 的群组发送消息
+func SendToRoom(msg *Message, roomID uint64) error {
+	return nil
 }
 
 func MockServerMessage(msgType MsgType, statusCode int, data string) []byte {

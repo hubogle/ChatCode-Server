@@ -53,10 +53,11 @@ paths:
   /api/v1/room/{id}:
     get:
       tags: [room]
-      summary: room page
-      description: room page
-      operationId: Room
+      summary: room get
+      description: room get
+      operationId: RoomGet
       x-group: room
+      x-middleware: auth
       parameters:
         - name: id
           in: path
@@ -67,6 +68,34 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/SuccessResp'
+
+  /api/v1/room/join:
+    post:
+      tags: [room]
+      summary: join room
+      description: join room
+      operationId: RoomJoin
+      x-group: room
+      x-middleware: auth
+      requestBody:
+        $ref: '#/components/requestBodies/RoomJoinReq'
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
+  /api/v1/room/create:
+    post:
+      tags: [room]
+      summary: create room
+      description: create room
+      operationId: RoomCreate
+      x-group: room
+      x-middleware: auth
+      requestBody:
+        $ref: '#/components/requestBodies/RoomCreateReq'
+      responses:
+        200:
+          $ref: '#/components/responses/RoomCreateResp'
 
   /api/v1/ws:
     get:
@@ -130,6 +159,39 @@ components:
             - account
             - password
 
+    RoomJoinReq:
+      description: join room request body
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              room_id:
+                type: integer
+                format: uint64
+                description: 房间id
+            required:
+            - room_id
+
+    RoomCreateReq:
+      description: create room request body
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 房间名称
+              info:
+                type: string
+                description: 房间信息
+              salt:
+                type: string
+                description: 房间密码
+            required:
+            - name
+
   responses:
     LoginResp:
       description: 登录成功
@@ -188,6 +250,27 @@ components:
                               description: 创建时间
                     required:
                       - list
+
+    RoomCreateResp:
+      description: 创建房间
+      content:
+        application/json:
+          schema:
+            description: 创建房间
+            x-level-one: data
+            allOf:
+              - $ref: '#/components/schemas/CodeMessage'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      room_id:
+                        type: integer
+                        format: uint64
+                        description: 房间id
+                    required:
+                      - room_id
 
     SuccessResp:
       description: 请求成功

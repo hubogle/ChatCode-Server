@@ -60,16 +60,20 @@ func (p *Job) Message() error {
 	if msg.SessionType == SessionType_Single && msg.ReceiverID == userID {
 		return errors.New("receiver id error")
 	}
-	if err = SendToUser(msg, msg.SenderID); err != nil {
-		return errors.WithMessage(err, "send to myself error")
-	}
+
+	// if err = SendToUser(msg, msg.SenderID); err != nil {
+	// 	return errors.WithMessage(err, "send to myself error")
+	// }
 
 	switch msg.SessionType {
 	case SessionType_Single:
 		if err = SendToUser(msg, msg.ReceiverID); err != nil {
 			return errors.WithMessage(err, "send to user error")
 		}
-	case SessionType_Group:
+	case SessionType_Room:
+		if err = SendToRoom(msg, msg.ReceiverID); err != nil {
+			return errors.WithMessage(err, "send to room error")
+		}
 	default:
 		return errors.New("session type error")
 	}
