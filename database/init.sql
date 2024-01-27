@@ -55,3 +55,14 @@ CREATE TABLE `user_room` (
     `deleted_at` BIGINT NULL DEFAULT NULL,
     PRIMARY KEY (`id`)
 );
+
+-- 用户好友关联表
+CREATE TABLE `user_friend` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id` BIGINT UNSIGNED NOT NULL COMMENT '用户ID',
+    `friend_id` BIGINT UNSIGNED NOT NULL COMMENT '好友ID',
+    `created_at` BIGINT NOT NULL,
+    `updated_at` BIGINT NOT NULL,
+    `deleted_at` BIGINT NULL DEFAULT NULL,
+    PRIMARY KEY (`id`)
+);

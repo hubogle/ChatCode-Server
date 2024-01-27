@@ -18,6 +18,9 @@ const (
 	ChatWsNewErr      = 2001
 	RoomUserJoinErr   = 3001
 	RoomCreateErr     = 3002
+	RoomGetListErr    = 3003
+	UserGetListErr    = 4001
+	ChatCreateErr     = 5001
 )
 
 // 定义常用的状态码和，错误信息，可以根据需要自行添加
@@ -33,6 +36,9 @@ func init() {
 	register(ChatWsNewErr, 200, "chat ws new error")
 	register(RoomUserJoinErr, 200, "room user join error")
 	register(RoomCreateErr, 200, "room create error")
+	register(RoomGetListErr, 200, "room get error")
+	register(UserGetListErr, 200, "user get error")
+	register(ChatCreateErr, 200, "chat create error")
 }
 
 var (

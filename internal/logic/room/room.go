@@ -12,7 +12,6 @@ import (
 //go:generate mockgen -source=$GOFILE -destination ../../mocks/logic/$GOFILE -package mock_logic
 
 type IRoomLogic interface {
-	RoomJoin(ctx context.Context, uc *jwt.UserClaims, req *room.RoomJoinReq) (err error)
 	RoomGet(ctx context.Context, req *room.RoomGetReq) (err error)
 	RoomCreate(ctx context.Context, uc *jwt.UserClaims, req *room.RoomCreateReq) (resp room.RoomCreateResp, err error)
 }

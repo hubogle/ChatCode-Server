@@ -12,7 +12,8 @@ import (
 //go:generate mockgen -source=$GOFILE -destination ../../mocks/logic/$GOFILE -package mock_logic
 
 type IChatLogic interface {
-	ChatList(ctx context.Context, uc *jwt.UserClaims, req *chat.ChatListReq) (err error)
+	ChatList(ctx context.Context, uc *jwt.UserClaims) (resp chat.ChatListResp, err error)
+	ChatCreate(ctx context.Context, uc *jwt.UserClaims, req *chat.ChatCreateReq) (err error)
 }
 
 func NewChatLogic(logicSvc *svc.ServiceContext, repo repository.ChatRepo) IChatLogic {

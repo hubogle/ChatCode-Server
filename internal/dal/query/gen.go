@@ -21,6 +21,7 @@ var (
 	MessageBasic *messageBasic
 	RoomBasic    *roomBasic
 	UserBasic    *userBasic
+	UserFriend   *userFriend
 	UserRoom     *userRoom
 )
 
@@ -30,6 +31,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	MessageBasic = &Q.MessageBasic
 	RoomBasic = &Q.RoomBasic
 	UserBasic = &Q.UserBasic
+	UserFriend = &Q.UserFriend
 	UserRoom = &Q.UserRoom
 }
 
@@ -40,6 +42,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		MessageBasic: newMessageBasic(db, opts...),
 		RoomBasic:    newRoomBasic(db, opts...),
 		UserBasic:    newUserBasic(db, opts...),
+		UserFriend:   newUserFriend(db, opts...),
 		UserRoom:     newUserRoom(db, opts...),
 	}
 }
@@ -51,6 +54,7 @@ type Query struct {
 	MessageBasic messageBasic
 	RoomBasic    roomBasic
 	UserBasic    userBasic
+	UserFriend   userFriend
 	UserRoom     userRoom
 }
 
@@ -63,6 +67,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		MessageBasic: q.MessageBasic.clone(db),
 		RoomBasic:    q.RoomBasic.clone(db),
 		UserBasic:    q.UserBasic.clone(db),
+		UserFriend:   q.UserFriend.clone(db),
 		UserRoom:     q.UserRoom.clone(db),
 	}
 }
@@ -82,6 +87,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		MessageBasic: q.MessageBasic.replaceDB(db),
 		RoomBasic:    q.RoomBasic.replaceDB(db),
 		UserBasic:    q.UserBasic.replaceDB(db),
+		UserFriend:   q.UserFriend.replaceDB(db),
 		UserRoom:     q.UserRoom.replaceDB(db),
 	}
 }
@@ -91,6 +97,7 @@ type queryCtx struct {
 	MessageBasic IMessageBasicDo
 	RoomBasic    IRoomBasicDo
 	UserBasic    IUserBasicDo
+	UserFriend   IUserFriendDo
 	UserRoom     IUserRoomDo
 }
 
@@ -100,6 +107,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		MessageBasic: q.MessageBasic.WithContext(ctx),
 		RoomBasic:    q.RoomBasic.WithContext(ctx),
 		UserBasic:    q.UserBasic.WithContext(ctx),
+		UserFriend:   q.UserFriend.WithContext(ctx),
 		UserRoom:     q.UserRoom.WithContext(ctx),
 	}
 }

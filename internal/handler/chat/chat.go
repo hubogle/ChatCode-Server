@@ -8,6 +8,7 @@ import (
 )
 
 type IChatHandler interface {
+	ChatCreateHandler(ctx *gin.Context)
 	ChatListHandler(ctx *gin.Context)
 }
 

@@ -9,7 +9,6 @@ import (
 
 type IRoomHandler interface {
 	RoomCreateHandler(ctx *gin.Context)
-	RoomJoinHandler(ctx *gin.Context)
 	RoomGetHandler(ctx *gin.Context)
 }
 
