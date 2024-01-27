@@ -14,6 +14,7 @@ import (
 type ChatRepo interface {
 	GetUserRoomByUserIDRoomID(ctx context.Context, userID, roomID uint64) (err error)
 	GetMessageListByRoomID(ctx context.Context, roomUID uint64, offset, limit int) (messageList []*model.MessageBasic, err error)
+	GetMessageListByUserID(ctx context.Context, userID, senderID uint64, offset, limit int) (messageList []*model.MessageBasic, err error)
 	InsertOneMessageBasic(ctx context.Context, messageBasic *model.MessageBasic) (err error)
 	GetUserFriendByUserID(ctx context.Context, userID uint64) (userBasicList []*model.UserBasic, err error)
 	GetRoomBasicByUserID(ctx context.Context, userID uint64) (roomBasicList []*model.RoomBasic, err error)
@@ -47,6 +48,16 @@ func (r *chatRepo) GetMessageListByRoomID(ctx context.Context, roomID uint64, of
 	messageList, _, err = r.MessageBasic.WithContext(ctx).
 		Select(r.MessageBasic.Content, r.MessageBasic.SenderID).
 		Where(r.MessageBasic.ReceiverID.Eq(roomID)).
+		Order(r.MessageBasic.CreatedAt.Desc()).
+		FindByPage(limit, (offset-1)*limit)
+	return
+}
+
+// GetMessageListByUserID get message list by user id
+func (r *chatRepo) GetMessageListByUserID(ctx context.Context, userID, senderID uint64, offset, limit int) (messageList []*model.MessageBasic, err error) {
+	messageList, _, err = r.MessageBasic.WithContext(ctx).
+		Select(r.MessageBasic.Content, r.MessageBasic.SenderID).
+		Where(r.MessageBasic.ReceiverID.Eq(userID)).Or(r.MessageBasic.SenderID.Eq(senderID)).
 		Order(r.MessageBasic.CreatedAt.Desc()).
 		FindByPage(limit, (offset-1)*limit)
 	return

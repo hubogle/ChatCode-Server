@@ -10,6 +10,7 @@ import (
 type IChatHandler interface {
 	ChatCreateHandler(ctx *gin.Context)
 	ChatListHandler(ctx *gin.Context)
+	ChatMessageHandler(ctx *gin.Context)
 }
 
 func NewChatHandler(handlerSvc *svc.ServiceContext, hdl hdl.Handler, logic chat.IChatLogic) IChatHandler {

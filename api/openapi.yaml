@@ -120,6 +120,32 @@ paths:
         200:
           $ref: '#/components/responses/SuccessResp'
 
+  /api/v1/chat/message/list:
+    get:
+      tags: [chat]
+      summary: chat message list
+      description: chat message list
+      operationId: chatMessage
+      x-group: chat
+      x-middleware: auth
+      parameters:
+        - name: type
+          in: query
+          description: 会话类型
+          required: true
+          schema:
+            type: integer
+        - name: uid
+          in: query
+          description: 会话id
+          required: true
+          schema:
+            type: integer
+            format: uint64
+      responses:
+        200:
+          $ref: '#/components/responses/ChatMessageResp'
+
 components:
   requestBodies:
     LoginReq:
@@ -250,6 +276,26 @@ components:
           schema:
             $ref: '#/components/schemas/CodeMessage'
 
+    ChatMessageResp:
+      description: 会话消息列表
+      content:
+        application/json:
+          schema:
+            description: 会话消息列表
+            x-level-one: data
+            allOf:
+              - $ref: '#/components/schemas/CodeMessage'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MessageItemInfo'
+                    required:
+                      - list
   schemas:
     CodeMessage:
       type: object
@@ -282,3 +328,31 @@ components:
         - type
         - name
         - uid
+
+    MessageItemInfo:
+      type: object
+      properties:
+        type:
+          type: integer
+          description: 消息类型
+          enum: [1, 2]
+        content:
+          type: string
+          description: 消息内容
+        uid:
+          type: integer
+          format: uint64
+          description: 发送者id
+        nickname:
+          type: string
+          description: 发送者昵称
+        send_at:
+          type: integer
+          format: int64
+          description: 发送时间
+      required:
+        - type
+        - content
+        - uid
+        - nickname
+        - send_at

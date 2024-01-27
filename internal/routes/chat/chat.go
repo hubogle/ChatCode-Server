@@ -21,4 +21,6 @@ func RegisterChatRoute(e *gin.Engine, svcCtx *svc.ServiceContext) {
 	e.POST("/api/v1/chat/create", middleware.Auth, chatHandler.ChatCreateHandler)
 
 	e.GET("/api/v1/chat/list", middleware.Auth, chatHandler.ChatListHandler)
+
+	e.GET("/api/v1/chat/message/list", middleware.Auth, chatHandler.ChatMessageHandler)
 }

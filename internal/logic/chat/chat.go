@@ -14,6 +14,7 @@ import (
 type IChatLogic interface {
 	ChatList(ctx context.Context, uc *jwt.UserClaims) (resp chat.ChatListResp, err error)
 	ChatCreate(ctx context.Context, uc *jwt.UserClaims, req *chat.ChatCreateReq) (err error)
+	ChatMessage(ctx context.Context, uc *jwt.UserClaims, req *chat.ChatMessageReq) (resp chat.ChatMessageResp, err error)
 }
 
 func NewChatLogic(logicSvc *svc.ServiceContext, repo repository.ChatRepo) IChatLogic {

@@ -10,6 +10,11 @@ type ChatListResp struct {
 	List []types.ChatItemInfo `binding:"required" json:"list"`
 }
 
+// ChatMessageResp 会话消息列表
+type ChatMessageResp struct {
+	List []types.MessageItemInfo `binding:"required" json:"list"`
+}
+
 // ChatCreateReq defines model for ChatCreateReq.
 type ChatCreateReq struct {
 	// Salt 会话密码
@@ -20,4 +25,13 @@ type ChatCreateReq struct {
 
 	// Uid 会话id
 	Uid uint64 `binding:"required" json:"uid"`
+}
+
+// ChatMessageReq chat message list
+type ChatMessageReq struct {
+	// Type 会话类型
+	Type int `binding:"required" form:"type"`
+
+	// Uid 会话id
+	Uid uint64 `binding:"required" form:"uid"`
 }

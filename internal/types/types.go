@@ -21,3 +21,21 @@ type CodeMessage struct {
 	// Msg 状态信息
 	Msg string `binding:"required" json:"msg"`
 }
+
+// MessageItemInfo defines model for MessageItemInfo.
+type MessageItemInfo struct {
+	// Content 消息内容
+	Content string `binding:"required" json:"content"`
+
+	// Nickname 发送者昵称
+	Nickname string `binding:"required" json:"nickname"`
+
+	// SendAt 发送时间
+	SendAt int64 `binding:"required" json:"send_at"`
+
+	// Type 消息类型
+	Type int `binding:"required,oneof=1 2" json:"type"`
+
+	// Uid 发送者id
+	Uid uint64 `binding:"required" json:"uid"`
+}
