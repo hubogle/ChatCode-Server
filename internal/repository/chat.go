@@ -45,3 +45,7 @@ func (r *chatRepo) GetMessageListByRoomID(ctx context.Context, roomID uint64, of
 		FindByPage(limit, (offset-1)*limit)
 	return
 }
+
+func (r *chatRepo) InsertOneMessageBasic(ctx context.Context, messageBasic *model.MessageBasic) (err error) {
+	return r.MessageBasic.WithContext(ctx).Create(messageBasic)
+}

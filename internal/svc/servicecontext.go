@@ -14,6 +14,8 @@ type ServiceContext struct {
 	Log *zap.Logger
 }
 
+var serviceContext *ServiceContext
+
 func NewServiceContext(cfg config.ServerConfig) *ServiceContext {
 	dbIns, err := dal.GetMySQLFactoryOr(cfg.Mysql)
 	if err != nil {
@@ -26,9 +28,14 @@ func NewServiceContext(cfg config.ServerConfig) *ServiceContext {
 		zap.S().Errorw("failed to get logger", "err", err)
 	}
 	defer logger.Sync()
-
-	return &ServiceContext{
+	serviceContext = &ServiceContext{
 		Db:  dbIns.GetDb(),
 		Log: logger,
 	}
+
+	return serviceContext
+}
+
+func GetServiceContext() *ServiceContext {
+	return serviceContext
 }

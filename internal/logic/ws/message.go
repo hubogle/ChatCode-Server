@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -8,6 +9,8 @@ import (
 	"github.com/hubogle/chatcode-server/internal/code"
 	"github.com/hubogle/chatcode-server/internal/dal/model"
 	"github.com/hubogle/chatcode-server/internal/dal/query"
+	"github.com/hubogle/chatcode-server/internal/repository"
+	"github.com/hubogle/chatcode-server/internal/svc"
 	"github.com/pkg/errors"
 )
 
@@ -63,8 +66,8 @@ type ClientMessage struct {
 type ServerMessage struct {
 	Type MsgType `json:"type"`
 	Code int     `json:"code"`
-	Msg  string  `json:"msg"`
-	Data string  `json:"data"`
+	Msg  string  `json:"msg,omitempty"`
+	Data string  `json:"data,omitempty"`
 }
 
 // SendToUser 对指定 user id 的用户发送消息
@@ -94,13 +97,51 @@ func SendToUser(msg *Message, userID uint64) error {
 	if conn == nil {
 		return errors.New(fmt.Sprintf("user id %d not online", userID))
 	}
-	conn.SendMsg(userID, msg.Content)
+	bytes := MockServerMessage(Msg_Type_Message, code.Success, msg.Content)
+	conn.SendMsg(userID, string(bytes))
 
 	return nil
 }
 
 // SendToRoom 对指定 room id 的群组发送消息
 func SendToRoom(msg *Message, roomID uint64) error {
+	ctx := context.Background()
+	repo := repository.NewRoomRepo(svc.GetServiceContext())
+	_, err := repo.GetRoomUserIDByUserIDRoomID(ctx, msg.SenderID, roomID)
+	if err != nil {
+		return errors.Wrap(err, fmt.Sprintf("user id %d not in room id %d", msg.SenderID, roomID))
+	}
+
+	userIDList, err := repo.GetRoomUserIDByRoomID(ctx, roomID)
+	if err != nil {
+		return errors.Wrap(err, fmt.Sprintf("get room id %d user id list error", roomID))
+	}
+
+	now := time.Now().Unix()
+	messageBasic := &model.MessageBasic{
+		SenderID:    msg.SenderID,
+		ReceiverID:  msg.ReceiverID,
+		SessionType: int32(msg.SessionType),
+		Content:     string(msg.Content),
+		ContentType: int32(msg.MessageType),
+		SendAt:      msg.SendAt,
+		CreatedAt:   now,
+		UpdatedAt:   now,
+	}
+	err = query.Q.MessageBasic.Create(messageBasic)
+	if err != nil {
+		return errors.Wrap(err, "message basic create error")
+	}
+
+	bytes := MockServerMessage(Msg_Type_Message, code.Success, msg.Content)
+	for _, userID := range userIDList {
+		conn := ConnManager.GetConn(userID)
+		if conn == nil {
+			continue
+		}
+		conn.SendMsg(userID, string(bytes))
+	}
+
 	return nil
 }
 
@@ -108,8 +149,10 @@ func MockServerMessage(msgType MsgType, statusCode int, data string) []byte {
 	msg := &ServerMessage{
 		Type: msgType,
 		Code: statusCode,
-		Msg:  code.GetCoder(statusCode).String(),
 		Data: data,
+	}
+	if statusCode != code.Success {
+		msg.Msg = code.GetCoder(statusCode).String()
 	}
 	result, _ := json.Marshal(msg)
 	return result

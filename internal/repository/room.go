@@ -14,6 +14,8 @@ import (
 type RoomRepo interface {
 	InsertOneUserRoom(ctx context.Context, userID, roomID uint64) (err error)
 	InsertOneRoomBasic(ctx context.Context, roomBasic *model.RoomBasic) (err error)
+	GetRoomUserIDByRoomID(ctx context.Context, roomID uint64) (userIDList []uint64, err error)
+	GetRoomUserIDByUserIDRoomID(ctx context.Context, userID, roomID uint64) (userRoom *model.UserRoom, err error)
 }
 
 func NewRoomRepo(svcRepo *svc.ServiceContext) RoomRepo {
@@ -46,4 +48,17 @@ func (r *roomRepo) InsertOneUserRoom(ctx context.Context, userID, roomID uint64)
 	}
 
 	return r.UserRoom.WithContext(ctx).Create(userRoom)
+}
+
+func (r *roomRepo) GetRoomUserIDByRoomID(ctx context.Context, roomID uint64) (userIDList []uint64, err error) {
+	err = r.UserRoom.WithContext(ctx).
+		Where(r.UserRoom.RoomID.Eq(roomID)).
+		Pluck(r.UserRoom.UserID, &userIDList)
+	return
+}
+
+func (r *roomRepo) GetRoomUserIDByUserIDRoomID(ctx context.Context, userID, roomID uint64) (userRoom *model.UserRoom, err error) {
+	return r.UserRoom.WithContext(ctx).
+		Where(r.UserRoom.UserID.Eq(userID), r.UserRoom.RoomID.Eq(roomID)).
+		First()
 }
