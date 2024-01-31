@@ -21,4 +21,6 @@ func RegisterRoomRoute(e *gin.Engine, svcCtx *svc.ServiceContext) {
 	e.POST("/api/v1/room/create", middleware.Auth, roomHandler.RoomCreateHandler)
 
 	e.GET("/api/v1/room/:id", middleware.Auth, roomHandler.RoomGetHandler)
+
+	e.GET("/api/v1/room/:id/person", middleware.Auth, roomHandler.RoomPersonHandler)
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func Auth(c *gin.Context) {
-	token := c.GetHeader("token")
+	token := c.GetHeader("Authorization")
 	userClaims, err := jwt.ParseToken(token)
 	if err != nil {
 		c.Abort()

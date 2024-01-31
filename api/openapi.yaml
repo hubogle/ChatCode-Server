@@ -83,6 +83,26 @@ paths:
         200:
           $ref: '#/components/responses/RoomCreateResp'
 
+  /api/v1/room/{id}/person:
+    get:
+      tags: [room]
+      summary: room person
+      description: room person
+      operationId: RoomPerson
+      x-group: room
+      x-middleware: auth
+      parameters:
+        - name: id
+          in: path
+          description: room id
+          required: true
+          schema:
+            type: integer
+            format: uint64
+      responses:
+        200:
+          $ref: '#/components/responses/GetRoomPersonResp'
+
   /api/v1/ws:
     get:
       tags: [ws]
@@ -232,6 +252,27 @@ components:
         application/json:
           schema:
             description: 会话列表
+            x-level-one: data
+            allOf:
+              - $ref: '#/components/schemas/CodeMessage'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChatItemInfo'
+                    required:
+                      - list
+
+    GetRoomPersonResp:
+      description: 房间人员列表
+      content:
+        application/json:
+          schema:
+            description: 房间人员列表
             x-level-one: data
             allOf:
               - $ref: '#/components/schemas/CodeMessage'

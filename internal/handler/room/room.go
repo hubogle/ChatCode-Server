@@ -10,6 +10,7 @@ import (
 type IRoomHandler interface {
 	RoomCreateHandler(ctx *gin.Context)
 	RoomGetHandler(ctx *gin.Context)
+	RoomPersonHandler(ctx *gin.Context)
 }
 
 func NewRoomHandler(handlerSvc *svc.ServiceContext, hdl hdl.Handler, logic room.IRoomLogic) IRoomHandler {
