@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hubogle/chatcode-server/internal/pkg/jwt"
@@ -9,6 +10,7 @@ import (
 
 func Auth(c *gin.Context) {
 	token := c.GetHeader("Authorization")
+	token = strings.TrimPrefix(token, "Bearer ")
 	userClaims, err := jwt.ParseToken(token)
 	if err != nil {
 		c.Abort()

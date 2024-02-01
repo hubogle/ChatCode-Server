@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hubogle/chatcode-server/config"
 	"github.com/hubogle/chatcode-server/internal/routes"
 	"github.com/hubogle/chatcode-server/internal/svc"
+	"github.com/hubogle/chatcode-server/pkg/middleware"
 	"github.com/spf13/viper"
 )
 
@@ -45,6 +47,7 @@ func main() {
 	gin.SetMode(cfg.App.Env)
 	r := gin.New()
 	routes.Setup(r, svc.NewServiceContext(cfg))
+	r.Use(middleware.Ginzap(time.RFC3339, false))
 
 	r.Run(cfg.App.Addr)
 	log.Println("监听端口:", cfg.App.Addr)

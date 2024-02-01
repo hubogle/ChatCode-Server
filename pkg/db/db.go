@@ -35,12 +35,15 @@ func NewMySQL(opts *DbOpts) (*gorm.DB, error) {
 		"Local")
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: logger.New(log.New(os.Stdout, "\r\n", log.LstdFlags), logger.Config{
-			SlowThreshold:             200 * time.Millisecond,
-			LogLevel:                  logger.LogLevel(opts.LogLevel),
-			IgnoreRecordNotFoundError: false,
-			Colorful:                  true,
-		}),
+		Logger: logger.New(
+			log.New(os.Stdout, "\r\n", log.LstdFlags),
+			logger.Config{
+				SlowThreshold:             200 * time.Millisecond,
+				LogLevel:                  logger.LogLevel(opts.LogLevel),
+				IgnoreRecordNotFoundError: false,
+				ParameterizedQueries:      true,
+				Colorful:                  true,
+			}),
 	})
 	if err != nil {
 		log.Fatalf("failed to connect database, err: %v", err)

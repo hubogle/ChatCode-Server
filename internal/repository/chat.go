@@ -71,7 +71,7 @@ func (r *chatRepo) InsertOneMessageBasic(ctx context.Context, messageBasic *mode
 func (r *chatRepo) GetUserFriendByUserID(ctx context.Context, userID uint64) (userBasicList []*model.UserBasic, err error) {
 	userBasicList, err = r.UserBasic.WithContext(ctx).
 		Select(r.UserBasic.UID, r.UserBasic.Account).
-		LeftJoin(r.UserFriend, r.UserFriend.UserID.EqCol(r.UserBasic.UID)).
+		LeftJoin(r.UserFriend, r.UserFriend.FriendID.EqCol(r.UserBasic.UID)).
 		Where(r.UserFriend.UserID.Eq(userID)).
 		Find()
 	return

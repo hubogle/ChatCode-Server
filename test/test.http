@@ -1,0 +1,40 @@
+@hostname = 127.0.0.1
+@port = 8080
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+### register
+
+POST http://{{host}}/api/v1/register HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "account": "sample",
+    "password": "123456"
+}
+
+### login
+
+@authToken = {{login.response.body.$.data.token}}
+
+# @name login
+POST http://{{host}}/api/v1/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "account": "sample",
+    "password": "123456"
+}
+
+### add friend
+POST http://{{host}}/api/v1/friend/add HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+{
+    "uid": 2622242083
+}
+
+### chat list
+GET http://{{host}}/api/v1/chat/list HTTP/1.1
+Authorization: Bearer {{authToken}}

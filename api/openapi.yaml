@@ -15,13 +15,26 @@ paths:
         200:
           $ref: '#/components/responses/SuccessResp'
 
+  /api/v1/register:
+    post:
+      tags: [user]
+      summary: user register
+      description: user register
+      operationId: UserRegister
+      x-group: user
+      requestBody:
+        $ref: '#/components/requestBodies/LoginReq'
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
   /api/v1/login:
     post:
-      tags: [oauth]
+      tags: [user]
       summary: user login
       description: user login
-      operationId: OauthLogin
-      x-group: oauth
+      operationId: UserLogin
+      x-group: user
       requestBody:
         $ref: '#/components/requestBodies/LoginReq'
       responses:
@@ -30,11 +43,11 @@ paths:
 
   /api/v1/logout:
     post:
-      tags: [oauth]
+      tags: [user]
       summary: user logout
       description: user logout
-      operationId: OauthLogout
-      x-group: oauth
+      operationId: UserLogout
+      x-group: user
       responses:
         200:
           $ref: '#/components/responses/SuccessResp'
@@ -46,6 +59,20 @@ paths:
       description: home page
       operationId: Home
       x-group: home
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
+  /api/v1/friend/add:
+    post:
+      tags: [friend]
+      summary: add friend
+      description: add friend
+      operationId: AddFriend
+      x-group: friend
+      x-middleware: auth
+      requestBody:
+        $ref: '#/components/requestBodies/AddFriendReq'
       responses:
         200:
           $ref: '#/components/responses/SuccessResp'
@@ -224,6 +251,20 @@ components:
                 description: 会话密码
             required:
             - type
+            - uid
+
+    AddFriendReq:
+      description: add friend request body
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uid:
+                type: integer
+                format: uint64
+                description: 用户id
+            required:
             - uid
 
   responses:

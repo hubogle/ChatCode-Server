@@ -10,5 +10,10 @@ func NewLogger() (*zap.Logger, error) {
 		ErrorOutputPaths: []string{"stderr"},
 		EncoderConfig:    zap.NewDevelopmentEncoderConfig(),
 	}
-	return config.Build()
+	logger, err := config.Build()
+	if err != nil {
+		return nil, err
+	}
+	zap.ReplaceGlobals(logger)
+	return logger, err
 }

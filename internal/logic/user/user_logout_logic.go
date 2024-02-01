@@ -1,12 +1,12 @@
-package oauth
+package user
 
 import (
 	"context"
 )
 
-// OauthLogout user logout
+// UserLogout user logout
 // POST /api/v1/logout
-func (l *logic) OauthLogout(ctx context.Context) (err error) {
+func (l *logic) UserLogout(ctx context.Context) (err error) {
 	// todo: add your logic here and delete this line
 
 	return

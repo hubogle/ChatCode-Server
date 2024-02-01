@@ -1,17 +1,17 @@
-package oauth
+package user
 
 import (
 	"context"
 
 	"github.com/hubogle/chatcode-server/internal/code"
 	"github.com/hubogle/chatcode-server/internal/pkg/jwt"
-	"github.com/hubogle/chatcode-server/internal/types/oauth"
+	"github.com/hubogle/chatcode-server/internal/types/user"
 	"go.uber.org/zap"
 )
 
-// OauthLogin user login
+// UserLogin user login
 // POST /api/v1/login
-func (l *logic) OauthLogin(ctx context.Context, req *oauth.LoginReq) (resp oauth.LoginResp, err error) {
+func (l *logic) UserLogin(ctx context.Context, req *user.LoginReq) (resp user.LoginResp, err error) {
 	userBasic, err := l.repo.GetUserBasicByAccountPassword(ctx, req.Account, req.Password)
 	if err != nil {
 		l.Log.Error("failed to get user basic", zap.Error(err))
