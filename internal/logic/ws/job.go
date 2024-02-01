@@ -36,7 +36,10 @@ func (p *Job) Login() error {
 
 	p.conn.SetUserID(uc.UID)
 	p.conn.Manager.AddConn(uc.UID, p.conn)
-	bytes := MockServerMessage(Msg_Type_login, code.Success, "ok")
+	message := &Message{
+		Content: "ok",
+	}
+	bytes := MockServerMessage(Msg_Type_login, code.Success, message)
 	p.conn.SendMsg(uc.UID, string(bytes))
 	return nil
 }

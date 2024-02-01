@@ -49,17 +49,17 @@ func (r *chatRepo) GetMessageListByRoomID(ctx context.Context, roomID uint64, of
 		Select(r.MessageBasic.Content, r.MessageBasic.SenderID).
 		Where(r.MessageBasic.ReceiverID.Eq(roomID)).
 		Order(r.MessageBasic.CreatedAt.Desc()).
-		FindByPage(limit, (offset-1)*limit)
+		FindByPage((offset-1)*limit, limit)
 	return
 }
 
 // GetMessageListByUserID get message list by user id
 func (r *chatRepo) GetMessageListByUserID(ctx context.Context, userID, senderID uint64, offset, limit int) (messageList []*model.MessageBasic, err error) {
-	messageList, _, err = r.MessageBasic.WithContext(ctx).
-		Select(r.MessageBasic.Content, r.MessageBasic.SenderID).
+	messageList, _, err = r.MessageBasic.Debug().WithContext(ctx).
+		Select(r.MessageBasic.Content, r.MessageBasic.SenderID, r.MessageBasic.SendAt).
 		Where(r.MessageBasic.ReceiverID.Eq(userID)).Or(r.MessageBasic.SenderID.Eq(senderID)).
 		Order(r.MessageBasic.CreatedAt.Desc()).
-		FindByPage(limit, (offset-1)*limit)
+		FindByPage((offset-1)*limit, limit)
 	return
 }
 

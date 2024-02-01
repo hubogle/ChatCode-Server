@@ -38,3 +38,7 @@ Authorization: Bearer {{authToken}}
 ### chat list
 GET http://{{host}}/api/v1/chat/list HTTP/1.1
 Authorization: Bearer {{authToken}}
+
+### chat message list
+GET http://{{host}}/api/v1/chat/message/list?uid=2622242083&type=1 HTTP/1.1
+Authorization: Bearer {{authToken}}

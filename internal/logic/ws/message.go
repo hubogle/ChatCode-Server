@@ -67,12 +67,12 @@ type ServerMessage struct {
 	Type MsgType `json:"type"`
 	Code int     `json:"code"`
 	Msg  string  `json:"msg,omitempty"`
-	Data string  `json:"data,omitempty"`
+	Data Message `json:"data,omitempty"`
 }
 
 // SendToUser 对指定 user id 的用户发送消息
 func SendToUser(msg *Message, userID uint64) error {
-	_, err := query.Q.UserBasic.Where(query.UserBasic.ID.Eq(userID)).Take()
+	_, err := query.Q.UserBasic.Where(query.UserBasic.UID.Eq(userID)).Take()
 	if err != nil {
 		return errors.Wrap(err, fmt.Sprintf("user id %d not found", userID))
 	}
@@ -97,7 +97,7 @@ func SendToUser(msg *Message, userID uint64) error {
 	if conn == nil {
 		return errors.New(fmt.Sprintf("user id %d not online", userID))
 	}
-	bytes := MockServerMessage(Msg_Type_Message, code.Success, msg.Content)
+	bytes := MockServerMessage(Msg_Type_Message, code.Success, msg)
 	conn.SendMsg(userID, string(bytes))
 
 	return nil
@@ -133,7 +133,7 @@ func SendToRoom(msg *Message, roomID uint64) error {
 		return errors.Wrap(err, "message basic create error")
 	}
 
-	bytes := MockServerMessage(Msg_Type_Message, code.Success, msg.Content)
+	bytes := MockServerMessage(Msg_Type_Message, code.Success, msg)
 	for _, userID := range userIDList {
 		conn := ConnManager.GetConn(userID)
 		if conn == nil {
@@ -145,11 +145,11 @@ func SendToRoom(msg *Message, roomID uint64) error {
 	return nil
 }
 
-func MockServerMessage(msgType MsgType, statusCode int, data string) []byte {
+func MockServerMessage(msgType MsgType, statusCode int, data *Message) []byte {
 	msg := &ServerMessage{
 		Type: msgType,
 		Code: statusCode,
-		Data: data,
+		Data: *data,
 	}
 	if statusCode != code.Success {
 		msg.Msg = code.GetCoder(statusCode).String()
