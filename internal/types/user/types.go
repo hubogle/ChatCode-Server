@@ -4,6 +4,9 @@ package user
 // LoginResp 登录成功
 type LoginResp struct {
 	Token string `binding:"required" json:"token"`
+
+	// Uid 用户id
+	Uid uint64 `binding:"required" json:"uid"`
 }
 
 // LoginReq defines model for LoginReq.

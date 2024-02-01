@@ -46,8 +46,8 @@ func main() {
 	InitConfig()
 	gin.SetMode(cfg.App.Env)
 	r := gin.New()
-	routes.Setup(r, svc.NewServiceContext(cfg))
 	r.Use(middleware.Ginzap(time.RFC3339, false))
+	routes.Setup(r, svc.NewServiceContext(cfg))
 
 	r.Run(cfg.App.Addr)
 	log.Println("监听端口:", cfg.App.Addr)

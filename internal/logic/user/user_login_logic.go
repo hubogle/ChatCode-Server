@@ -23,6 +23,7 @@ func (l *logic) UserLogin(ctx context.Context, req *user.LoginReq) (resp user.Lo
 	}
 
 	resp.Token = token
+	resp.Uid = userBasic.UID
 
 	return
 }
