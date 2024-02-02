@@ -3,14 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hubogle/chatcode-server/config"
 	"github.com/hubogle/chatcode-server/internal/routes"
 	"github.com/hubogle/chatcode-server/internal/svc"
+	"github.com/hubogle/chatcode-server/pkg/log"
 	"github.com/hubogle/chatcode-server/pkg/middleware"
 	"github.com/spf13/viper"
 )
@@ -44,11 +44,12 @@ func InitConfig() {
 
 func main() {
 	InitConfig()
+	log.NewSlog("json", -4)
 	gin.SetMode(cfg.App.Env)
 	r := gin.New()
-	r.Use(middleware.Ginzap(time.RFC3339, false))
+	r.Use(middleware.GinSlog())
 	routes.Setup(r, svc.NewServiceContext(cfg))
 
 	r.Run(cfg.App.Addr)
-	log.Println("监听端口:", cfg.App.Addr)
+	slog.Info("服务启动成功", slog.String("addr", cfg.App.Addr))
 }
