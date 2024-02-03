@@ -58,7 +58,7 @@ func (r *chatRepo) GetMessageListByUserID(ctx context.Context, userID, senderID 
 	messageList, _, err = r.MessageBasic.Debug().WithContext(ctx).
 		Select(r.MessageBasic.Content, r.MessageBasic.SenderID, r.MessageBasic.SendAt).
 		Where(r.MessageBasic.ReceiverID.Eq(userID)).Or(r.MessageBasic.SenderID.Eq(senderID)).
-		Order(r.MessageBasic.CreatedAt.Desc()).
+		Order(r.MessageBasic.CreatedAt).
 		FindByPage((offset-1)*limit, limit)
 	return
 }

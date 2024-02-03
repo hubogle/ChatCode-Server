@@ -64,9 +64,9 @@ func (p *Job) Message() error {
 		return errors.New("receiver id error")
 	}
 
-	// if err = SendToUser(msg, msg.SenderID); err != nil {
-	// 	return errors.WithMessage(err, "send to myself error")
-	// }
+	if err = SendToUser(msg, msg.SenderID); err != nil {
+		return errors.WithMessage(err, "send to myself error")
+	}
 
 	switch msg.SessionType {
 	case SessionType_Single:

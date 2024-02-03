@@ -89,6 +89,10 @@ func (c *Connection) Reader() {
 	for {
 		_, messageRaw, err := c.Socket.ReadMessage()
 		if err != nil {
+			if websocket.IsCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				fmt.Println("client close connection")
+				return
+			}
 			fmt.Println("read message error: ", err)
 			if c.GetUserID() == 0 {
 				return

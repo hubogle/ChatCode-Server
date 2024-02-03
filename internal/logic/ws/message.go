@@ -77,20 +77,22 @@ func SendToUser(msg *Message, userID uint64) error {
 		return errors.Wrap(err, fmt.Sprintf("user id %d not found", userID))
 	}
 
-	now := time.Now().Unix()
-	messageBasic := &model.MessageBasic{
-		SenderID:    msg.SenderID,
-		ReceiverID:  msg.ReceiverID,
-		SessionType: int32(msg.SessionType),
-		Content:     string(msg.Content),
-		ContentType: int32(msg.MessageType),
-		SendAt:      msg.SendAt,
-		CreatedAt:   now,
-		UpdatedAt:   now,
-	}
-	err = query.Q.MessageBasic.Create(messageBasic)
-	if err != nil {
-		return errors.Wrap(err, "message basic create error")
+	if userID != msg.SenderID {
+		now := time.Now().Unix()
+		messageBasic := &model.MessageBasic{
+			SenderID:    msg.SenderID,
+			ReceiverID:  msg.ReceiverID,
+			SessionType: int32(msg.SessionType),
+			Content:     string(msg.Content),
+			ContentType: int32(msg.MessageType),
+			SendAt:      msg.SendAt,
+			CreatedAt:   now,
+			UpdatedAt:   now,
+		}
+		err = query.Q.MessageBasic.Create(messageBasic)
+		if err != nil {
+			return errors.Wrap(err, "message basic create error")
+		}
 	}
 
 	conn := ConnManager.GetConn(userID)
