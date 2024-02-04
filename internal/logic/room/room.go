@@ -15,6 +15,7 @@ type IRoomLogic interface {
 	RoomGet(ctx context.Context, req *room.RoomGetReq) (err error)
 	RoomCreate(ctx context.Context, uc *jwt.UserClaims, req *room.RoomCreateReq) (resp room.RoomCreateResp, err error)
 	RoomPerson(ctx context.Context, req *room.RoomPersonReq) (resp room.GetRoomPersonResp, err error)
+	RoomJoin(ctx context.Context, uc *jwt.UserClaims, req *room.RoomJoinReq) (err error)
 }
 
 func NewRoomLogic(logicSvc *svc.ServiceContext, repo repository.RoomRepo) IRoomLogic {

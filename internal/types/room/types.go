@@ -28,6 +28,15 @@ type RoomCreateReq struct {
 	Salt *string `json:"salt,omitempty"`
 }
 
+// RoomJoinReq defines model for RoomJoinReq.
+type RoomJoinReq struct {
+	// RoomId 房间id
+	RoomId uint64 `binding:"required" json:"room_id"`
+
+	// Salt 房间密码
+	Salt *string `json:"salt,omitempty"`
+}
+
 // RoomGetReq room get
 type RoomGetReq struct {
 	// Id room id

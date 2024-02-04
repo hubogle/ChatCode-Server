@@ -18,6 +18,10 @@ func (l *logic) RoomCreate(ctx context.Context, uc *jwt.UserClaims, req *room.Ro
 	uid := uuid.New().ID()
 	now := time.Now().Unix()
 
+	if req.Salt != nil && *req.Salt == "" {
+		req.Salt = nil
+	}
+
 	roomBasic := model.RoomBasic{
 		UID:       uint64(uid),
 		UserID:    uc.UID,
@@ -36,6 +40,20 @@ func (l *logic) RoomCreate(ctx context.Context, uc *jwt.UserClaims, req *room.Ro
 		return resp, err
 	}
 	resp.RoomId = uint64(uid)
+
+	userRoom := &model.UserRoom{
+		UserID:    uc.UID,
+		RoomID:    uint64(uid),
+		RoomType:  1,
+		JoinedAt:  now,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+	err = l.repo.InsertOneUserRoom(ctx, userRoom)
+
+	if err != nil {
+		return resp, err
+	}
 
 	return
 }

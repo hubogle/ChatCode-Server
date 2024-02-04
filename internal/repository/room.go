@@ -12,6 +12,7 @@ import (
 
 type RoomRepo interface {
 	InsertOneRoomBasic(ctx context.Context, roomBasic *model.RoomBasic) (err error)
+	InsertOneUserRoom(ctx context.Context, userRoom *model.UserRoom) (err error)
 	GetRoomUserIDByRoomID(ctx context.Context, roomID uint64) (userIDList []uint64, err error)
 	GetRoomUserIDByUserIDRoomID(ctx context.Context, userID, roomID uint64) (userRoom *model.UserRoom, err error)
 	GetUserBasicByRoomID(ctx context.Context, roomID uint64) (userBasicList []*model.UserBasic, err error)
@@ -58,4 +59,8 @@ func (r *roomRepo) GetUserBasicByRoomID(ctx context.Context, roomID uint64) (use
 		Where(r.UserBasic.UID.In(userIDList...)).
 		Find()
 	return
+}
+
+func (r *roomRepo) InsertOneUserRoom(ctx context.Context, userRoom *model.UserRoom) (err error) {
+	return r.UserRoom.WithContext(ctx).Create(userRoom)
 }

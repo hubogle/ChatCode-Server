@@ -110,6 +110,20 @@ paths:
         200:
           $ref: '#/components/responses/RoomCreateResp'
 
+  /api/v1/room/join:
+    post:
+      tags: [room]
+      summary: join room
+      description: join room
+      operationId: RoomJoin
+      x-group: room
+      x-middleware: auth
+      requestBody:
+        $ref: '#/components/requestBodies/RoomJoinReq'
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessResp'
+
   /api/v1/room/{id}/person:
     get:
       tags: [room]
@@ -230,6 +244,23 @@ components:
                 description: 房间密码
             required:
             - name
+
+    RoomJoinReq:
+      description: join room request body
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              room_id:
+                type: integer
+                format: uint64
+                description: 房间id
+              salt:
+                type: string
+                description: 房间密码
+            required:
+            - room_id
 
     ChatCreateReq:
       description: create chat request body
